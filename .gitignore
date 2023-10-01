@@ -1,3 +1,4 @@
 .DS_Store
 build
-*.egg-info/
+*.egg-info
+cheby_version.hpp
