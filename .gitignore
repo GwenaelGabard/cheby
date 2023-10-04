@@ -2,3 +2,4 @@
 build
 *.egg-info
 cheby_version.hpp
+__pycache__
