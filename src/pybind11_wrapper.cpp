@@ -25,6 +25,8 @@ void init_cheby(py::module &m) {
         .def("__call__", &RealFunction::Eval)
         .def("__add__", &Add<RealFunction, RealFunction, RealFunction>)
         .def("__add__", &Add<RealFunction, ComplexFunction, ComplexFunction>)
+        .def("__sub__", &Sub<RealFunction, RealFunction, RealFunction>)
+        .def("__sub__", &Sub<RealFunction, ComplexFunction, ComplexFunction>)
         .def("__mul__", &Multiply<RealFunction, RealFunction, RealFunction>)
         .def("__mul__",
              &Multiply<RealFunction, ComplexFunction, ComplexFunction>)
@@ -44,6 +46,8 @@ void init_cheby(py::module &m) {
         .def("__call__", &ComplexFunction::Eval)
         .def("__add__", &Add<ComplexFunction, RealFunction, ComplexFunction>)
         .def("__add__", &Add<ComplexFunction, ComplexFunction, ComplexFunction>)
+        .def("__sub__", &Sub<ComplexFunction, RealFunction, ComplexFunction>)
+        .def("__sub__", &Sub<ComplexFunction, ComplexFunction, ComplexFunction>)
         .def("__mul__",
              &Multiply<ComplexFunction, ComplexFunction, ComplexFunction>)
         .def("__mul__",
