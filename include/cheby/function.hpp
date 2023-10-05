@@ -110,6 +110,31 @@ class Function {
         d.Trim();
         return (d);
     }
+
+    Function Primitive() const {
+        if (coef.size() == 0) return (Function(xmin, xmax, CoefVector()));
+        if (coef.size() == 1) {
+            CoefVector g(2);
+            g(0) = 0.0;
+            g(1) = coef(0) * (xmax - xmin) / 2.0;
+            return (Function(xmin, xmax, g));
+        }
+        const Index N = coef.size() - 1;
+        CoefVector g = CoefVector::Zero(N + 2);
+        double nn = 2.0;
+        for (Index n = 2; n <= N; ++n) {
+            g(n - 1) -= coef(n) / 2.0 / (nn - 1.0);
+            g(n + 1) += coef(n) / 2.0 / (nn + 1.0);
+            nn += 1.0;
+        }
+        g(0) += coef(1);
+        g(1) += coef(0);
+        g(2) += coef(1) / 4.0;
+        g *= (xmax - xmin) / 2.0;
+        Function d(xmin, xmax, g);
+        d.Trim();
+        return (d);
+    }
 };
 
 }  // namespace cheby

@@ -22,7 +22,8 @@ void init_cheby(py::module &m){
         .def("coef", &RealFunction::Coef)
         .def("tail_length", &RealFunction::TailLength)
         .def("trim", &RealFunction::Trim)
-        .def("derivative", &RealFunction::Derivative);
+        .def("derivative", &RealFunction::Derivative)
+        .def("primitive", &RealFunction::Primitive);
 
     py::class_<ComplexFunction>(m, "ComplexFunction")
         .def(py::init<std::function<ComplexFunction::ValueVector(ComplexFunction::ParamVector)>, double, double, int>(), py::arg("f"), py::arg("start"), py::arg("end"), py::arg("N") = -1)
@@ -30,7 +31,8 @@ void init_cheby(py::module &m){
         .def("coef", &ComplexFunction::Coef)
         .def("tail_length", &ComplexFunction::TailLength)
         .def("trim", &ComplexFunction::Trim)
-        .def("derivative", &ComplexFunction::Derivative);
+        .def("derivative", &ComplexFunction::Derivative)
+        .def("primitive", &ComplexFunction::Primitive);
 }
 
 
