@@ -1,19 +1,20 @@
 #ifndef CHEBY_BASIS_H
 #define CHEBY_BASIS_H
 
-#include "Eigen/Dense"
 #include <cmath>
+
+#include "Eigen/Dense"
 
 namespace cheby {
 
 template <typename valueT, typename parameterT = double,
           typename indexT = std::size_t>
 class Basis {
-  public:
+   public:
     using Value = valueT;
     using Parameter = parameterT;
     using Index = indexT;
-    using ValVector = Eigen::Array<Value, Eigen::Dynamic, 1>;
+    using ValueVector = Eigen::Array<Value, Eigen::Dynamic, 1>;
     using ParamVector = Eigen::Array<Parameter, Eigen::Dynamic, 1>;
 
     static constexpr double rel_tol = 1.e-14;
@@ -30,10 +31,8 @@ class Basis {
     };
 
     const ParamVector points1(int num_points = -1) const {
-        if (num_points == 0)
-            return ParamVector(0);
-        if (num_points < 0)
-            num_points = order + 1;
+        if (num_points == 0) return ParamVector(0);
+        if (num_points < 0) num_points = order + 1;
         ParamVector points(num_points);
         const Parameter a = EIGEN_PI / num_points;
         const Parameter b = EIGEN_PI / (2.0 * num_points);
@@ -45,10 +44,8 @@ class Basis {
     };
 
     const ParamVector points2(int num_points = -1) const {
-        if ((num_points == 0) || (num_points == 1))
-            return ParamVector(0);
-        if (num_points < 0)
-            num_points = order + 1;
+        if ((num_points == 0) || (num_points == 1)) return ParamVector(0);
+        if (num_points < 0) num_points = order + 1;
         ParamVector points(num_points);
         const Parameter a = EIGEN_PI / (num_points - 1);
         const Parameter b = (xmax + xmin) * 0.5;
@@ -59,6 +56,6 @@ class Basis {
     };
 };
 
-} // namespace cheby
+}  // namespace cheby
 
 #endif
