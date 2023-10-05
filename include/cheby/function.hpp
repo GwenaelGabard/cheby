@@ -94,6 +94,22 @@ class Function {
         }
         return (xi * fk - a + coef(0));
     }
+
+    Function Derivative() const {
+        if (coef.size() < 2) return (Function(xmin, xmax, CoefVector()));
+        const Index N = coef.size() - 1;
+        CoefVector g = CoefVector::Zero(N + 2);
+        const Parameter constant = 4.0 / (xmax - xmin);
+        double nn = N;
+        for (Index n = N; n > 1; --n) {
+            g(n - 1) = g(n + 1) + nn * coef(n) * constant;
+            nn -= 1.0;
+        }
+        g(0) = (coef(1) * constant + g(2)) * 0.5;
+        Function d(xmin, xmax, g);
+        d.Trim();
+        return (d);
+    }
 };
 
 }  // namespace cheby

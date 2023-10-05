@@ -21,15 +21,16 @@ void init_cheby(py::module &m){
         .def("__call__", &RealFunction::Eval)
         .def("coef", &RealFunction::Coef)
         .def("tail_length", &RealFunction::TailLength)
-        .def("trim", &RealFunction::Trim);
+        .def("trim", &RealFunction::Trim)
+        .def("derivative", &RealFunction::Derivative);
 
     py::class_<ComplexFunction>(m, "ComplexFunction")
         .def(py::init<std::function<ComplexFunction::ValueVector(ComplexFunction::ParamVector)>, double, double, int>(), py::arg("f"), py::arg("start"), py::arg("end"), py::arg("N") = -1)
         .def("__call__", &ComplexFunction::Eval)
         .def("coef", &ComplexFunction::Coef)
         .def("tail_length", &ComplexFunction::TailLength)
-        .def("trim", &ComplexFunction::Trim);
-
+        .def("trim", &ComplexFunction::Trim)
+        .def("derivative", &ComplexFunction::Derivative);
 }
 
 
