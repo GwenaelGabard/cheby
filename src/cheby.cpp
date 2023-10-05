@@ -1,5 +1,3 @@
 #include "cheby/cheby.hpp"
 
-namespace cheby {
-
-}
+namespace cheby {}
