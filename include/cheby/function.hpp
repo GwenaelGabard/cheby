@@ -135,6 +135,10 @@ class Function {
         d.Trim();
         return (d);
     }
+
+    Function Real() const { return (Function(xmin, xmax, coef.real())); }
+
+    Function Imag() const { return (Function(xmin, xmax, coef.imag())); }
 };
 
 }  // namespace cheby
