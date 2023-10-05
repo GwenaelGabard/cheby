@@ -141,6 +141,33 @@ class Function {
     Function Imag() const { return (Function(xmin, xmax, coef.imag())); }
 };
 
+template <typename T1, typename T2, typename outT>
+outT Add(const T1 &f1, const T2 &f2) {
+    const typename T1::Index size1 = f1.coef.size();
+    const typename T1::Index size2 = f2.coef.size();
+    if (size1 > size2) {
+        typename outT::CoefVector c = outT::CoefVector::Zero(size1);
+        c = f1.coef;
+        c.head(size2) += f2.coef;
+        outT g(f1.xmin, f1.xmax, c);
+        g.Trim();
+        return (g);
+    } else if (size2 > size1) {
+        typename outT::CoefVector c = outT::CoefVector::Zero(size2);
+        c = f2.coef;
+        c.head(size1) += f1.coef;
+        outT g(f1.xmin, f1.xmax, c);
+        g.Trim();
+        return (g);
+    } else {
+        typename outT::CoefVector c = outT::CoefVector::Zero(size1);
+        c = f1.coef + f2.coef;
+        outT g(f1.xmin, f1.xmax, c);
+        g.Trim();
+        return (g);
+    }
+}
+
 }  // namespace cheby
 
 #endif
