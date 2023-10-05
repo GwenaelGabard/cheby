@@ -168,6 +168,26 @@ outT Add(const T1 &f1, const T2 &f2) {
     }
 }
 
+template <typename T1, typename T2, typename outT>
+outT Multiply(const T1 &f1, const T2 &f2) {
+    const typename T1::Index size1 = f1.coef.size();
+    const typename T2::Index size2 = f2.coef.size();
+    typename outT::CoefVector c = outT::CoefVector::Zero(size1 + size2);
+    typename outT::Value p;
+    for (int i1 = 0; i1 < size1; ++i1) {
+        for (int i2 = 0; i2 < size2; ++i2) {
+            p = f1.coef(i1) * f2.coef(i2);
+            const auto j = abs(i1 - i2);
+            c(i1 + i2) = c(i1 + i2) + p;
+            c(j) = c(j) + p;
+        }
+    }
+    c /= 2.0;
+    outT g(f1.xmin, f1.xmax, c);
+    g.Trim();
+    return (g);
+}
+
 }  // namespace cheby
 
 #endif
