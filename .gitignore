@@ -3,3 +3,5 @@ build
 *.egg-info
 cheby_version.hpp
 __pycache__
+.pytest_cache
+.ruff_cache
