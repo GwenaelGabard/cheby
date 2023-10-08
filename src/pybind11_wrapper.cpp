@@ -36,7 +36,8 @@ void init_cheby(py::module &m) {
         .def("derivative", &RealFunction::Derivative)
         .def("primitive", &RealFunction::Primitive)
         .def("real", &RealFunction::Real)
-        .def("imag", &RealFunction::Imag);
+        .def("imag", &RealFunction::Imag)
+        .def("product_matrix", &RealFunction::ProductMatrix);
 
     py::class_<ComplexFunction>(m, "ComplexFunction")
         .def(py::init<std::function<ComplexFunction::ValueVector(
@@ -58,7 +59,8 @@ void init_cheby(py::module &m) {
         .def("derivative", &ComplexFunction::Derivative)
         .def("primitive", &ComplexFunction::Primitive)
         .def("real", &ComplexFunction::Real)
-        .def("imag", &ComplexFunction::Imag);
+        .def("imag", &ComplexFunction::Imag)
+        .def("product_matrix", &ComplexFunction::ProductMatrix);
 }
 
 PYBIND11_MODULE(cheby, m) {

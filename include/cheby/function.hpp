@@ -16,6 +16,7 @@ class Function {
     using Index = indexT;
     using CoefVector = Eigen::Array<Value, Eigen::Dynamic, 1>;
     using ValueVector = Eigen::Array<Value, Eigen::Dynamic, 1>;
+    using ValueMatrix = Eigen::Matrix<Value, Eigen::Dynamic, Eigen::Dynamic>;
     using ParamVector = Eigen::Array<Parameter, Eigen::Dynamic, 1>;
 
     static constexpr double rel_tol = 1.e-14;
@@ -139,6 +140,19 @@ class Function {
     Function Real() const { return (Function(xmin, xmax, coef.real())); }
 
     Function Imag() const { return (Function(xmin, xmax, coef.imag())); }
+
+    ValueMatrix ProductMatrix(const Index order) const {
+        const Index N = order + 1;
+        const Index M = coef.size();
+        ValueMatrix matrix = ValueMatrix::Zero(M + N, N);
+        for (int n = 0; n < N; ++n) {
+            for (int m = 0; m < M; ++m) {
+                matrix(m + n, n) += coef(m) / 2.0;
+                matrix(abs(m - n), n) += coef(m) / 2.0;
+            }
+        }
+        return (matrix);
+    }
 };
 
 template <typename T1, typename T2, typename outT>
