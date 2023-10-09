@@ -15,6 +15,7 @@ class Basis {
     using Parameter = parameterT;
     using Index = indexT;
     using ValueVector = Eigen::Array<Value, Eigen::Dynamic, 1>;
+    using ValueMatrix = Eigen::Array<Value, Eigen::Dynamic, Eigen::Dynamic>;
     using ParamVector = Eigen::Array<Parameter, Eigen::Dynamic, 1>;
 
     static constexpr double rel_tol = 1.e-14;
@@ -53,6 +54,22 @@ class Basis {
         for (Index i = 0; i < num_points; ++i)
             points(i) = b + c * std::cos(a * i);
         return points;
+    };
+
+    const ValueMatrix Derivative() const {
+        const Index N = order + 1;
+        ValueMatrix D = ValueMatrix::Zero(N, N);
+        if (N == 1) return D;
+        const Value jacobian = 4.0 / (xmax - xmin);
+        D(0, 1) = jacobian * 0.5;
+        if (N == 2) return (D);
+        D(1, 2) = jacobian * 2.0;
+        for (Index n = 3; n < N; ++n) {
+            const Value nn = static_cast<Value>(n);
+            D(n - 1, n) = jacobian * nn;
+            D.col(n) += nn / (nn - 2.0) * D.col(n - 2);
+        }
+        return D;
     };
 };
 
