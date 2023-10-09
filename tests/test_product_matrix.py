@@ -16,7 +16,7 @@ abs_tol = 1.0e-12
 
 
 @pytest.mark.parametrize("case", prod_list_rr)
-def test_multiply_rr(case):
+def test_matprod_rr(case):
     fun1 = case[0]
     fun2 = case[1]
     xmin = case[2]
@@ -43,7 +43,7 @@ def test_multiply_rr(case):
 
 
 @pytest.mark.parametrize("case", prod_list_cr)
-def test_multiply_cr(case):
+def test_matprod_cr(case):
     fun1 = case[0]
     fun2 = case[1]
     xmin = case[2]
@@ -70,7 +70,7 @@ def test_multiply_cr(case):
 
 
 @pytest.mark.parametrize("case", prod_list_rc)
-def test_multiply_rc(case):
+def test_matprod_rc(case):
     fun1 = case[0]
     fun2 = case[1]
     xmin = case[2]
@@ -97,7 +97,7 @@ def test_multiply_rc(case):
 
 
 @pytest.mark.parametrize("case", prod_list_cc)
-def test_multiply_cc(case):
+def test_matprod_cc(case):
     fun1 = case[0]
     fun2 = case[1]
     xmin = case[2]
