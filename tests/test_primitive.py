@@ -8,11 +8,8 @@ rel_tol = 1.0e-12
 abs_tol = 1.0e-12
 
 
-@pytest.mark.parametrize("case", real_case_list)
-def test_real_primitive(case):
-    fun = case[0]
-    xmin = case[1]
-    xmax = case[2]
+@pytest.mark.parametrize("fun, xmin, xmax", real_case_list)
+def test_real_primitive(fun, xmin, xmax):
     ifun = sp.integrate(fun, x)
 
     ff = fun_from_expr(x, fun)
@@ -33,11 +30,8 @@ def test_real_primitive(case):
         assert error / norm < rel_tol
 
 
-@pytest.mark.parametrize("case", real_case_list + complex_case_list)
-def test_complex_primitive(case):
-    fun = case[0]
-    xmin = case[1]
-    xmax = case[2]
+@pytest.mark.parametrize("fun, xmin, xmax", real_case_list + complex_case_list)
+def test_complex_primitive(fun, xmin, xmax):
     ifun = sp.integrate(fun, x)
 
     ff = fun_from_expr(x, fun)

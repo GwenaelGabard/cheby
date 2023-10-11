@@ -15,12 +15,8 @@ rel_tol = 1.0e-12
 abs_tol = 1.0e-12
 
 
-@pytest.mark.parametrize("case", prod_list_rr)
-def test_sub_rr(case):
-    fun1 = case[0]
-    fun2 = case[1]
-    xmin = case[2]
-    xmax = case[3]
+@pytest.mark.parametrize("fun1, fun2, xmin, xmax", prod_list_rr)
+def test_sub_rr(fun1, fun2, xmin, xmax):
     prod = fun1 - fun2
 
     ff1 = fun_from_expr(x, fun1)
@@ -42,12 +38,8 @@ def test_sub_rr(case):
         assert error / norm < rel_tol
 
 
-@pytest.mark.parametrize("case", prod_list_cr)
-def test_sub_cr(case):
-    fun1 = case[0]
-    fun2 = case[1]
-    xmin = case[2]
-    xmax = case[3]
+@pytest.mark.parametrize("fun1, fun2, xmin, xmax", prod_list_cr)
+def test_sub_cr(fun1, fun2, xmin, xmax):
     prod = fun1 - fun2
 
     ff1 = fun_from_expr(x, fun1)
@@ -69,12 +61,8 @@ def test_sub_cr(case):
         assert error / norm < rel_tol
 
 
-@pytest.mark.parametrize("case", prod_list_rc)
-def test_sub_rc(case):
-    fun1 = case[0]
-    fun2 = case[1]
-    xmin = case[2]
-    xmax = case[3]
+@pytest.mark.parametrize("fun1, fun2, xmin, xmax", prod_list_rc)
+def test_sub_rc(fun1, fun2, xmin, xmax):
     prod = fun1 - fun2
 
     ff1 = fun_from_expr(x, fun1)
@@ -96,12 +84,8 @@ def test_sub_rc(case):
         assert error / norm < rel_tol
 
 
-@pytest.mark.parametrize("case", prod_list_cc)
-def test_sub_cc(case):
-    fun1 = case[0]
-    fun2 = case[1]
-    xmin = case[2]
-    xmax = case[3]
+@pytest.mark.parametrize("fun1, fun2, xmin, xmax", prod_list_cc)
+def test_sub_cc(fun1, fun2, xmin, xmax):
     prod = fun1 - fun2
 
     ff1 = fun_from_expr(x, fun1)

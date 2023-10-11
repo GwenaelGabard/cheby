@@ -15,17 +15,13 @@ rel_tol = 1.0e-12
 abs_tol = 1.0e-12
 
 
-@pytest.mark.parametrize("case", prod_list_rr)
-def test_add_rr(case):
-    fun1 = case[0]
-    fun2 = case[1]
-    xmin = case[2]
-    xmax = case[3]
-    prod = fun1 + fun2
+@pytest.mark.parametrize("fun1, fun2, xmin, xmax", prod_list_rr)
+def test_add_rr(fun1, fun2, xmin, xmax):
+    add = fun1 + fun2
 
     ff1 = fun_from_expr(x, fun1)
     ff2 = fun_from_expr(x, fun2)
-    fp = fun_from_expr(x, prod)
+    fp = fun_from_expr(x, add)
 
     f1 = RealFunction(ff1, xmin, xmax)
     f2 = RealFunction(ff2, xmin, xmax)
@@ -42,17 +38,13 @@ def test_add_rr(case):
         assert error / norm < rel_tol
 
 
-@pytest.mark.parametrize("case", prod_list_cr)
-def test_add_cr(case):
-    fun1 = case[0]
-    fun2 = case[1]
-    xmin = case[2]
-    xmax = case[3]
-    prod = fun1 + fun2
+@pytest.mark.parametrize("fun1, fun2, xmin, xmax", prod_list_cr)
+def test_add_cr(fun1, fun2, xmin, xmax):
+    add = fun1 + fun2
 
     ff1 = fun_from_expr(x, fun1)
     ff2 = fun_from_expr(x, fun2)
-    fp = fun_from_expr(x, prod)
+    fp = fun_from_expr(x, add)
 
     f1 = ComplexFunction(ff1, xmin, xmax)
     f2 = RealFunction(ff2, xmin, xmax)
@@ -69,17 +61,13 @@ def test_add_cr(case):
         assert error / norm < rel_tol
 
 
-@pytest.mark.parametrize("case", prod_list_rc)
-def test_add_rc(case):
-    fun1 = case[0]
-    fun2 = case[1]
-    xmin = case[2]
-    xmax = case[3]
-    prod = fun1 + fun2
+@pytest.mark.parametrize("fun1, fun2, xmin, xmax", prod_list_rc)
+def test_add_rc(fun1, fun2, xmin, xmax):
+    add = fun1 + fun2
 
     ff1 = fun_from_expr(x, fun1)
     ff2 = fun_from_expr(x, fun2)
-    fp = fun_from_expr(x, prod)
+    fp = fun_from_expr(x, add)
 
     f1 = RealFunction(ff1, xmin, xmax)
     f2 = ComplexFunction(ff2, xmin, xmax)
@@ -96,17 +84,13 @@ def test_add_rc(case):
         assert error / norm < rel_tol
 
 
-@pytest.mark.parametrize("case", prod_list_cc)
-def test_add_cc(case):
-    fun1 = case[0]
-    fun2 = case[1]
-    xmin = case[2]
-    xmax = case[3]
-    prod = fun1 + fun2
+@pytest.mark.parametrize("fun1, fun2, xmin, xmax", prod_list_cc)
+def test_add_cc(fun1, fun2, xmin, xmax):
+    add = fun1 + fun2
 
     ff1 = fun_from_expr(x, fun1)
     ff2 = fun_from_expr(x, fun2)
-    fp = fun_from_expr(x, prod)
+    fp = fun_from_expr(x, add)
 
     f1 = ComplexFunction(ff1, xmin, xmax)
     f2 = ComplexFunction(ff2, xmin, xmax)

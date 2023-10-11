@@ -7,11 +7,8 @@ rel_tol = 1.0e-13
 abs_tol = 1.0e-13
 
 
-@pytest.mark.parametrize("case", real_case_list)
-def test_interpolation_r(case):
-    fun = case[0]
-    xmin = case[1]
-    xmax = case[2]
+@pytest.mark.parametrize("fun, xmin, xmax", real_case_list)
+def test_interpolation_r(fun, xmin, xmax):
     ff = fun_from_expr(x, fun)
     f = RealFunction(ff, xmin, xmax)
     xn = np.linspace(xmin, xmax, 256)
@@ -27,11 +24,8 @@ def test_interpolation_r(case):
         assert error / norm < rel_tol
 
 
-@pytest.mark.parametrize("case", real_case_list + complex_case_list)
-def test_interpolation_c(case):
-    fun = case[0]
-    xmin = case[1]
-    xmax = case[2]
+@pytest.mark.parametrize("fun, xmin, xmax", real_case_list + complex_case_list)
+def test_interpolation_c(fun, xmin, xmax):
     ff = fun_from_expr(x, fun)
     f = ComplexFunction(ff, xmin, xmax)
     xn = np.linspace(xmin, xmax, 256)
