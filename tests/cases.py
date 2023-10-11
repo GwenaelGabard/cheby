@@ -4,10 +4,10 @@ import numpy as np
 
 def sub_vec(a, b):
     if len(a) < len(b):
-        c = -b.copy()
+        c = -b.astype(dtype=complex)
         c[: len(a)] += a
     else:
-        c = a.copy()
+        c = a.astype(dtype=complex)
         c[: len(b)] -= b
     return c
 

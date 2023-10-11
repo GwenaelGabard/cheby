@@ -39,6 +39,7 @@ void init_cheby(py::module &m) {
         .def("primitive", &RealFunction::Primitive)
         .def("real", &RealFunction::Real)
         .def("imag", &RealFunction::Imag)
+        .def("conj", &RealFunction::Conjugate)
         .def("product_matrix", &RealFunction::ProductMatrix);
 
     py::class_<ComplexFunction>(m, "ComplexFunction")
@@ -62,6 +63,7 @@ void init_cheby(py::module &m) {
         .def("primitive", &ComplexFunction::Primitive)
         .def("real", &ComplexFunction::Real)
         .def("imag", &ComplexFunction::Imag)
+        .def("conj", &ComplexFunction::Conjugate)
         .def("product_matrix", &ComplexFunction::ProductMatrix);
 }
 

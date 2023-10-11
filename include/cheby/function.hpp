@@ -141,6 +141,10 @@ class Function {
 
     Function Imag() const { return (Function(xmin, xmax, coef.imag())); }
 
+    Function Conjugate() const {
+        return (Function(xmin, xmax, coef.conjugate()));
+    }
+
     ValueMatrix ProductMatrix(const Index order) const {
         const Index N = order + 1;
         const Index M = coef.size();
