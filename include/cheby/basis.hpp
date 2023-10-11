@@ -56,6 +56,19 @@ class Basis {
         return points;
     };
 
+    ValueMatrix Eval(const ParamVector x) const {
+        const Index N = order + 1;
+        ValueMatrix T(x.size(), N);
+        const ParamVector xi = (x - xmin) * (4.0 / (xmax - xmin)) - 2.0;
+        T.col(0) = 1.0;
+        if (N == 1) return T;
+        T.col(1) = xi / 2.0;
+        if (N == 2) return T;
+        for (Index n = 2; n < N; ++n)
+            T.col(n) = xi * T.col(n - 1) - T.col(n - 2);
+        return T;
+    };
+
     const ValueMatrix Derivative() const {
         const Index N = order + 1;
         ValueMatrix D = ValueMatrix::Zero(N, N);
