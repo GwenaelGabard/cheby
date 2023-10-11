@@ -31,7 +31,7 @@ class Basis {
         xmax = end;
     };
 
-    const ParamVector points1(int num_points = -1) const {
+    const ParamVector Points1(int num_points = -1) const {
         if (num_points == 0) return ParamVector(0);
         if (num_points < 0) num_points = order + 1;
         ParamVector points(num_points);
@@ -44,7 +44,7 @@ class Basis {
         return points;
     };
 
-    const ParamVector points2(int num_points = -1) const {
+    const ParamVector Points2(int num_points = -1) const {
         if ((num_points == 0) || (num_points == 1)) return ParamVector(0);
         if (num_points < 0) num_points = order + 1;
         ParamVector points(num_points);
