@@ -92,7 +92,7 @@ class Function {
     using ValueVector = Eigen::Array<Value, Eigen::Dynamic, 1>;
     using ValueMatrix = Eigen::Matrix<Value, Eigen::Dynamic, Eigen::Dynamic>;
     using ParamVector = Eigen::Array<Parameter, Eigen::Dynamic, 1>;
-    using RealPart = Eigen::NumTraits<Value>::Real;
+    using RealPart = typename Eigen::NumTraits<Value>::Real;
 
     static constexpr double rel_tol = 1.e-14;
     static constexpr Index tail_length = 8;
