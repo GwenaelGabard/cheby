@@ -27,7 +27,7 @@ def fun_from_expr(x, expr):
     return np.vectorize(sp.lambdify(x, expr, "numpy"))
 
 
-x = sp.Symbol("x")
+x = sp.Symbol("x", real=True)
 
 rfun_list = []
 rfun_list.append(0 * x)
@@ -56,7 +56,7 @@ rfun_list.append(sp.exp(-x))
 rfun_list.append(sp.exp(-0.4 * x))
 rfun_list.append(sp.exp(-3.2 * x))
 rfun_list.append(sp.exp(-(x**2)))
-rfun_list.append(sp.exp(-0.4 * x**2))
+rfun_list.append(sp.exp(-sp.Rational(4, 10) * x**2))
 rfun_list.append(sp.exp(-2.2 * x**2))
 
 cfun_list = []
