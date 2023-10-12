@@ -18,6 +18,7 @@ class Function {
     using ValueVector = Eigen::Array<Value, Eigen::Dynamic, 1>;
     using ValueMatrix = Eigen::Matrix<Value, Eigen::Dynamic, Eigen::Dynamic>;
     using ParamVector = Eigen::Array<Parameter, Eigen::Dynamic, 1>;
+    using RealPart = Eigen::NumTraits<Value>::Real;
 
     static constexpr double rel_tol = 1.e-14;
     static constexpr Index tail_length = 8;
@@ -158,9 +159,13 @@ class Function {
         return (f(1) - f(0));
     }
 
-    Function Real() const { return (Function(xmin, xmax, coef.real())); }
+    Function<RealPart, Parameter, Index> Real() const {
+        return (Function<RealPart, Parameter, Index>(xmin, xmax, coef.real()));
+    }
 
-    Function Imag() const { return (Function(xmin, xmax, coef.imag())); }
+    Function<RealPart, Parameter, Index> Imag() const {
+        return (Function<RealPart, Parameter, Index>(xmin, xmax, coef.imag()));
+    }
 
     Function Conjugate() const {
         return (Function(xmin, xmax, coef.conjugate()));
