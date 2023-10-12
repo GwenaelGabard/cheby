@@ -7,6 +7,80 @@
 
 namespace cheby {
 
+template <typename T1, typename T2, typename outT>
+outT Add(const T1 &f1, const T2 &f2) {
+    const typename T1::Index size1 = f1.coef.size();
+    const typename T1::Index size2 = f2.coef.size();
+    if (size1 > size2) {
+        typename outT::CoefVector c = outT::CoefVector::Zero(size1);
+        c = f1.coef;
+        c.head(size2) += f2.coef;
+        outT g(f1.xmin, f1.xmax, c);
+        g.Trim();
+        return (g);
+    } else if (size2 > size1) {
+        typename outT::CoefVector c = outT::CoefVector::Zero(size2);
+        c = f2.coef;
+        c.head(size1) += f1.coef;
+        outT g(f1.xmin, f1.xmax, c);
+        g.Trim();
+        return (g);
+    } else {
+        typename outT::CoefVector c = outT::CoefVector::Zero(size1);
+        c = f1.coef + f2.coef;
+        outT g(f1.xmin, f1.xmax, c);
+        g.Trim();
+        return (g);
+    }
+}
+
+template <typename T1, typename T2, typename outT>
+outT Sub(const T1 &f1, const T2 &f2) {
+    const typename T1::Index size1 = f1.coef.size();
+    const typename T1::Index size2 = f2.coef.size();
+    if (size1 > size2) {
+        typename outT::CoefVector c = outT::CoefVector::Zero(size1);
+        c = f1.coef;
+        c.head(size2) -= f2.coef;
+        outT g(f1.xmin, f1.xmax, c);
+        g.Trim();
+        return (g);
+    } else if (size2 > size1) {
+        typename outT::CoefVector c = outT::CoefVector::Zero(size2);
+        c = -f2.coef;
+        c.head(size1) += f1.coef;
+        outT g(f1.xmin, f1.xmax, c);
+        g.Trim();
+        return (g);
+    } else {
+        typename outT::CoefVector c = outT::CoefVector::Zero(size1);
+        c = f1.coef - f2.coef;
+        outT g(f1.xmin, f1.xmax, c);
+        g.Trim();
+        return (g);
+    }
+}
+
+template <typename T1, typename T2, typename outT>
+outT Multiply(const T1 &f1, const T2 &f2) {
+    const typename T1::Index size1 = f1.coef.size();
+    const typename T2::Index size2 = f2.coef.size();
+    typename outT::CoefVector c = outT::CoefVector::Zero(size1 + size2);
+    typename outT::Value p;
+    for (int i1 = 0; i1 < size1; ++i1) {
+        for (int i2 = 0; i2 < size2; ++i2) {
+            p = f1.coef(i1) * f2.coef(i2);
+            const auto j = abs(i1 - i2);
+            c(i1 + i2) = c(i1 + i2) + p;
+            c(j) = c(j) + p;
+        }
+    }
+    c /= 2.0;
+    outT g(f1.xmin, f1.xmax, c);
+    g.Trim();
+    return (g);
+}
+
 template <typename valueT, typename parameterT = double,
           typename indexT = std::size_t>
 class Function {
@@ -183,81 +257,19 @@ class Function {
         }
         return (matrix);
     }
+
+    RealPart NormL2() const {
+        const auto product =
+            Multiply<Function, Function, Function>(*this, Conjugate());
+        return (sqrt(product.Real().Integral()));
+    }
+
+    RealPart NormH1(const RealPart alpha = 1.0) {
+        const auto norm_f = NormL2();
+        const auto norm_df = Derivative().NormL2();
+        return (sqrt(norm_f * norm_f + alpha * norm_df * norm_df));
+    }
 };
-
-template <typename T1, typename T2, typename outT>
-outT Add(const T1 &f1, const T2 &f2) {
-    const typename T1::Index size1 = f1.coef.size();
-    const typename T1::Index size2 = f2.coef.size();
-    if (size1 > size2) {
-        typename outT::CoefVector c = outT::CoefVector::Zero(size1);
-        c = f1.coef;
-        c.head(size2) += f2.coef;
-        outT g(f1.xmin, f1.xmax, c);
-        g.Trim();
-        return (g);
-    } else if (size2 > size1) {
-        typename outT::CoefVector c = outT::CoefVector::Zero(size2);
-        c = f2.coef;
-        c.head(size1) += f1.coef;
-        outT g(f1.xmin, f1.xmax, c);
-        g.Trim();
-        return (g);
-    } else {
-        typename outT::CoefVector c = outT::CoefVector::Zero(size1);
-        c = f1.coef + f2.coef;
-        outT g(f1.xmin, f1.xmax, c);
-        g.Trim();
-        return (g);
-    }
-}
-
-template <typename T1, typename T2, typename outT>
-outT Sub(const T1 &f1, const T2 &f2) {
-    const typename T1::Index size1 = f1.coef.size();
-    const typename T1::Index size2 = f2.coef.size();
-    if (size1 > size2) {
-        typename outT::CoefVector c = outT::CoefVector::Zero(size1);
-        c = f1.coef;
-        c.head(size2) -= f2.coef;
-        outT g(f1.xmin, f1.xmax, c);
-        g.Trim();
-        return (g);
-    } else if (size2 > size1) {
-        typename outT::CoefVector c = outT::CoefVector::Zero(size2);
-        c = -f2.coef;
-        c.head(size1) += f1.coef;
-        outT g(f1.xmin, f1.xmax, c);
-        g.Trim();
-        return (g);
-    } else {
-        typename outT::CoefVector c = outT::CoefVector::Zero(size1);
-        c = f1.coef - f2.coef;
-        outT g(f1.xmin, f1.xmax, c);
-        g.Trim();
-        return (g);
-    }
-}
-
-template <typename T1, typename T2, typename outT>
-outT Multiply(const T1 &f1, const T2 &f2) {
-    const typename T1::Index size1 = f1.coef.size();
-    const typename T2::Index size2 = f2.coef.size();
-    typename outT::CoefVector c = outT::CoefVector::Zero(size1 + size2);
-    typename outT::Value p;
-    for (int i1 = 0; i1 < size1; ++i1) {
-        for (int i2 = 0; i2 < size2; ++i2) {
-            p = f1.coef(i1) * f2.coef(i2);
-            const auto j = abs(i1 - i2);
-            c(i1 + i2) = c(i1 + i2) + p;
-            c(j) = c(j) + p;
-        }
-    }
-    c /= 2.0;
-    outT g(f1.xmin, f1.xmax, c);
-    g.Trim();
-    return (g);
-}
 
 }  // namespace cheby
 
