@@ -137,6 +137,27 @@ class Function {
         return (d);
     }
 
+    Value Integral() const {
+        if (coef.size() == 0) return (0.0);
+        if (coef.size() == 1) return (coef(0) * (xmax - xmin));
+        const Index N = coef.size() - 1;
+        Value nn = 2.0;
+        Value integral = coef(0);
+        for (Index n = 2; n <= N; n += 2) {
+            integral += coef(n) / (1.0 - nn * nn);
+            nn += 2.0;
+        }
+        return (integral * (xmax - xmin));
+    }
+
+    Value Integral(const Parameter a, const Parameter b) const {
+        ParamVector bounds(2);
+        bounds(0) = a;
+        bounds(1) = b;
+        auto f = Primitive().Eval(bounds);
+        return (f(1) - f(0));
+    }
+
     Function Real() const { return (Function(xmin, xmax, coef.real())); }
 
     Function Imag() const { return (Function(xmin, xmax, coef.imag())); }

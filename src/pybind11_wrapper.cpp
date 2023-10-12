@@ -37,6 +37,11 @@ void init_cheby(py::module &m) {
         .def("trim", &RealFunction::Trim)
         .def("derivative", &RealFunction::Derivative)
         .def("primitive", &RealFunction::Primitive)
+        .def("integral",
+             py::overload_cast<>(&RealFunction::Integral, py::const_))
+        .def("integral", py::overload_cast<const RealFunction::Parameter,
+                                           const RealFunction::Parameter>(
+                             &RealFunction::Integral, py::const_))
         .def("real", &RealFunction::Real)
         .def("imag", &RealFunction::Imag)
         .def("conj", &RealFunction::Conjugate)
@@ -61,6 +66,11 @@ void init_cheby(py::module &m) {
         .def("trim", &ComplexFunction::Trim)
         .def("derivative", &ComplexFunction::Derivative)
         .def("primitive", &ComplexFunction::Primitive)
+        .def("integral",
+             py::overload_cast<>(&ComplexFunction::Integral, py::const_))
+        .def("integral", py::overload_cast<const ComplexFunction::Parameter,
+                                           const ComplexFunction::Parameter>(
+                             &ComplexFunction::Integral, py::const_))
         .def("real", &ComplexFunction::Real)
         .def("imag", &ComplexFunction::Imag)
         .def("conj", &ComplexFunction::Conjugate)
