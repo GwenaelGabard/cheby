@@ -4,6 +4,7 @@
 #include <unsupported/Eigen/FFT>
 
 #include "Eigen/Dense"
+#include "utils.hpp"
 
 namespace cheby {
 
@@ -281,6 +282,21 @@ class Function {
         matrix.row(N - 1) = -coef.head(N) / (2.0 * coef(N));
         matrix(N - 1, N - 2) += 0.5;
         return (matrix);
+    }
+
+    ParamVector Roots() const {
+        auto values = BalanceMatrix(ColleagueMatrix()).eigenvalues();
+        ParamVector roots(values.size());
+        Index j = 0;
+        for (Index i = 0; i < values.size(); ++i) {
+            const Parameter r = values(i).real();
+            if ((r >= -1.0) & (r <= 1.0) & (values(i).imag() == 0.0)) {
+                roots(j) = (r + 1.0) / 2.0 * (xmax - xmin) + xmin;
+                j++;
+            }
+        }
+        roots.conservativeResize(j);
+        return (roots);
     }
 };
 
