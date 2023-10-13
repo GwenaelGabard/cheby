@@ -269,6 +269,19 @@ class Function {
         const auto norm_df = Derivative().NormL2();
         return (sqrt(norm_f * norm_f + alpha * norm_df * norm_df));
     }
+
+    ValueMatrix ColleagueMatrix() const {
+        const Index N = coef.size() - 1;
+        ValueMatrix matrix = ValueMatrix::Zero(N, N);
+        matrix(0, 1) = 1.0;
+        for (Index n = 1; n < N - 1; ++n) {
+            matrix(n, n - 1) = 0.5;
+            matrix(n, n + 1) = 0.5;
+        }
+        matrix.row(N - 1) = -coef.head(N) / (2.0 * coef(N));
+        matrix(N - 1, N - 2) += 0.5;
+        return (matrix);
+    }
 };
 
 }  // namespace cheby
