@@ -298,6 +298,8 @@ class Function {
         roots.conservativeResize(j);
         return (roots);
     }
+
+    ParamVector Extrema() const { return (Derivative().Roots()); }
 };
 
 }  // namespace cheby
