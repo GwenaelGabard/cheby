@@ -95,13 +95,10 @@ class Function {
     CoefVector coef;
     Parameter xmin, xmax;
 
-    Function() : coef(), xmin(-1.0), xmax(+1.0){};
+    Function() : xmin(-1.0), xmax(+1.0), coef(){};
 
-    Function(const Parameter start, const Parameter end, const CoefVector &c) {
-        xmin = start;
-        xmax = end;
-        coef = c;
-    };
+    Function(const Parameter start, const Parameter end, const CoefVector &c)
+        : xmin(start), xmax(end), coef(c){};
 
     Function(std::function<ValueVector(ParamVector)> f, const Parameter start,
              const Parameter end, const int N = -1) {
