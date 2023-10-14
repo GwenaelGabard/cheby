@@ -87,7 +87,7 @@ class Basis {
         return T;
     };
 
-    const ValueMatrix Derivative() const {
+    const ValueMatrix DiffMatrix() const {
         const Index N = order + 1;
         ValueMatrix D = ValueMatrix::Zero(N, N);
         if (N == 1) return D;
