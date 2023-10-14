@@ -17,6 +17,7 @@ void init_cheby(py::module &m) {
         .def("points1", &Basis1D::Points1, py::arg("num_points") = -1)
         .def("points2", &Basis1D::Points2, py::arg("num_points") = -1)
         .def("eval", &Basis1D::Eval)
+        .def("derivatives", &Basis1D::Derivatives)
         .def("derivative", &Basis1D::Derivative);
 
     py::class_<RealFunction>(m, "RealFunction")

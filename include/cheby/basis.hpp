@@ -66,6 +66,27 @@ class Basis {
         return T;
     };
 
+    std::vector<ValueMatrix> Derivatives(const ParamVector x,
+                                         const Index D) const {
+        const Index N = order + 1;
+        const ParamVector xi = (x - xmin) * (4.0 / (xmax - xmin)) - 2.0;
+        std::vector<ValueMatrix> T(D + 1);
+        for (auto &t : T) t = ValueMatrix::Zero(x.size(), N);
+        T[0].col(0) = 1.0;
+        if (N == 1) return T;
+        T[0].col(1) = xi / 2.0;
+        if (D > 0) T[1].col(1) = 1.0;
+        if (N == 2) return T;
+        for (Index n = 2; n < N; ++n) {
+            T[0].col(n) = xi * T[0].col(n - 1) - T[0].col(n - 2);
+            for (Index d = 1; d <= D; ++d)
+                T[d].col(n) = xi * T[d].col(n - 1) +
+                              2 * d * T[d - 1].col(n - 1) - T[d].col(n - 2);
+        }
+        for (Index d = 1; d <= D; ++d) T[d] *= std::pow(2.0 / (xmax - xmin), d);
+        return T;
+    };
+
     const ValueMatrix Derivative() const {
         const Index N = order + 1;
         ValueMatrix D = ValueMatrix::Zero(N, N);
