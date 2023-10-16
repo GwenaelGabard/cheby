@@ -321,6 +321,16 @@ class Function {
     }
 };
 
+template <typename valueT, typename parameterT = double,
+          typename indexT = std::size_t>
+Function<valueT, parameterT, indexT> Constant(const parameterT xmin,
+                                              const parameterT xmax,
+                                              const valueT c) {
+    typename Function<valueT, parameterT, indexT>::CoefVector coef(1);
+    coef(0) = c;
+    return (Function<valueT, parameterT, indexT>(xmin, xmax, coef));
+};
+
 }  // namespace cheby
 
 #endif

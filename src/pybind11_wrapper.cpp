@@ -93,5 +93,7 @@ void init_cheby(py::module &m) {
 PYBIND11_MODULE(cheby, m) {
     m.doc() = "Functions represented as Chebyshev series";
     m.attr("__version__") = CHEBYVERSION;
+    m.def("RealConstant", &Constant<double>);
+    m.def("ComplexConstant", &Constant<std::complex<double> >);
     init_cheby(m);
 }
