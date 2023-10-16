@@ -102,6 +102,21 @@ class Basis {
         }
         return D;
     };
+
+    const ValueMatrix DirichletMatrix() const {
+        const Index N = order + 1;
+        ValueMatrix matrix(N, N);
+        for (Index i = 2; i < N; ++i) {
+            matrix(i, i) = 0.5;
+            matrix(i - 2, i) = -0.5;
+        }
+        matrix(0, 0) = 0.5;
+        matrix(1, 0) = -0.5;
+        matrix(0, 1) = 0.5;
+        matrix(1, 1) = 0.5;
+        std::cout << matrix.data() << std::endl;
+        return matrix;
+    }
 };
 
 }  // namespace cheby
