@@ -1,6 +1,7 @@
 #ifndef CHEBY_FUNCTION_H
 #define CHEBY_FUNCTION_H
 
+#include <iostream>
 #include <unsupported/Eigen/FFT>
 
 #include "Eigen/Dense"
@@ -291,6 +292,34 @@ class Function {
     }
 
     ParamVector Extrema() const { return (Derivative().Roots()); }
+
+    Function Power(const Index n) const {
+        if (n == 0) {
+            CoefVector g(1);
+            g(0) = 1.0;
+            return (Function(xmin, xmax, g));
+        }
+        if (n == 1) return (*this);
+        auto f2 = Multiply<Function, Function, Function>(*this, *this);
+        if (n == 2) return (f2);
+        const Index k = Index(log2(n)) + 1;
+        std::vector<Function> f(k);
+        f[0] = *this;
+        f[1] = f2;
+        for (Index i = 2; i < k; ++i)
+            f[i] = Multiply<Function, Function, Function>(f[i - 1], f[i - 1]);
+        Index p = 1 << (k - 1);
+        Index m = n - p;
+        Function fn = f[k - 1];
+        for (int i = k - 2; i >= 0; --i) {
+            p >>= 1;
+            if (m >= p) {
+                fn = Multiply<Function, Function, Function>(fn, f[i]);
+                m -= p;
+            }
+        }
+        return (fn);
+    }
 };
 
 }  // namespace cheby
