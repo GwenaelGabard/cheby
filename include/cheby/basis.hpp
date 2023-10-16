@@ -114,7 +114,6 @@ class Basis {
         matrix(1, 0) = -0.5;
         matrix(0, 1) = 0.5;
         matrix(1, 1) = 0.5;
-        std::cout << matrix.data() << std::endl;
         return matrix;
     }
 };
