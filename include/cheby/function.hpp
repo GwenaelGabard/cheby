@@ -1,7 +1,6 @@
 #ifndef CHEBY_FUNCTION_H
 #define CHEBY_FUNCTION_H
 
-#include <iostream>
 #include <unsupported/Eigen/FFT>
 
 #include "Eigen/Dense"
