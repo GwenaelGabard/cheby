@@ -17,7 +17,7 @@ def test_real_diffmat(fun, xmin, xmax):
     f = RealFunction(ff, xmin, xmax)
     df_ex = RealFunction(dff, xmin, xmax)
     basis = Basis1D(len(f.coef()) - 1, xmin, xmax)
-    c_num = basis.derivative() @ f.coef()
+    c_num = basis.diff_matrix() @ f.coef()
 
     delta = sub_vec(df_ex.coef(), c_num)
     error = np.max(np.abs(delta))
@@ -39,7 +39,7 @@ def test_complex_diffmat(fun, xmin, xmax):
     f = ComplexFunction(ff, xmin, xmax)
     df_ex = ComplexFunction(dff, xmin, xmax)
     basis = Basis1D(len(f.coef()) - 1, xmin, xmax)
-    c_num = basis.derivative() @ f.coef()
+    c_num = basis.diff_matrix() @ f.coef()
 
     delta = sub_vec(df_ex.coef(), c_num)
     error = np.max(np.abs(delta))
