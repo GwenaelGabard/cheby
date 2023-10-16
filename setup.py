@@ -9,7 +9,7 @@ from pathlib import Path
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 with open("src/cheby_version.hpp", "w") as fp:
     fp.write(f'#include <string>\nconst std::string CHEBYVERSION = "{VERSION}";')
 
