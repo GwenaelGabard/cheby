@@ -53,6 +53,7 @@ void init_cheby(py::module &m) {
         .def("roots", &RealFunction::Roots)
         .def("extrema", &RealFunction::Extrema)
         .def("pow", &RealFunction::Power)
+        .def("__pow__", &RealFunction::Power)
         .def("product_matrix", &RealFunction::ProductMatrix);
 
     py::class_<ComplexFunction>(m, "ComplexFunction")
@@ -88,6 +89,7 @@ void init_cheby(py::module &m) {
         .def("roots", &ComplexFunction::Roots)
         .def("extrema", &ComplexFunction::Extrema)
         .def("pow", &ComplexFunction::Power)
+        .def("__pow__", &ComplexFunction::Power)
         .def("product_matrix", &ComplexFunction::ProductMatrix);
 }
 
