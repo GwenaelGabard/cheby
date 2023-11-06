@@ -10,7 +10,7 @@ from setuptools.command.build_ext import build_ext
 # Get version from the latest git tag
 tags = str(
     subprocess.check_output(
-        ["git", "tag", "--sort=taggerdate"], stderr=subprocess.STDOUT
+        ["git", "tag", "--sort=refname"], stderr=subprocess.STDOUT
     )
 )
 version = tags.strip("'b\\n").split("\\n")[-1][1:]
