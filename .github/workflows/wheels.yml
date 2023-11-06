@@ -1,4 +1,4 @@
-name: Wheels
+name: Release
 
 on:
   workflow_dispatch:
@@ -17,27 +17,39 @@ concurrency:
 
 jobs:
   build_wheels:
-    name: Wheels on ${{ matrix.os }}
+    name: Building wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v4
       with:
         submodules: true
-
-    - uses: pypa/cibuildwheel@v2.15
+    - name: Build
+      uses: pypa/cibuildwheel@v2.15
       env:
         CIBW_ARCHS_MACOS: auto universal2
-
-    - name: Verify clean directory
-      run: git diff --exit-code
-      shell: bash
-
-    - name: Upload wheels
+    - name: Upload
       uses: actions/upload-artifact@v3
       with:
         path: wheelhouse/*.whl
+
+  upload_to_pypi:
+    name: Uploading to PyPI
+    needs: build_wheels
+    environment: pypi
+    permissions:
+      id-token: write
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' && github.event.action == 'published'
+    steps:
+    - name: Download
+      uses: actions/download-artifact@v3
+      with:
+        name: artifact
+        path: dist
+    - name: Publish
+      uses: pypa/gh-action-pypi-publish@release/v1
