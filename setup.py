@@ -1,5 +1,3 @@
-# Based on https://github.com/pybind/cmake_example
-
 import os
 import re
 import subprocess
@@ -128,13 +126,17 @@ class CMakeBuild(build_ext):
             ["cmake", "--build", ".", *build_args], cwd=build_temp, check=True
         )
 
+
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
+
 setup(
     name="cheby",
     version=VERSION,
     author="Gwénaël Gabard",
     author_email="gwenael.gabard@univ-lemans.fr",
     description="Functions represented as Chebyshev series",
-    long_description="",
+    long_description=long_description,
     ext_modules=[CMakeExtension("cheby")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
