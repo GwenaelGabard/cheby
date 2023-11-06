@@ -147,6 +147,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     ext_modules=[CMakeExtension("cheby")],
+    url="https://github.com/GwenaelGabard/cheby",
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
     extras_require={"test": ["pytest>=6.0"]},
