@@ -145,6 +145,7 @@ setup(
     author_email="gwenael.gabard@univ-lemans.fr",
     description="Functions represented as Chebyshev series",
     long_description=long_description,
+    long_description_content_type='text/markdown',
     ext_modules=[CMakeExtension("cheby")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
