@@ -7,9 +7,17 @@ from pathlib import Path
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
-VERSION = "0.2.1"
+# Get version from the latest git tag
+tags = str(
+    subprocess.check_output(
+        ["git", "tag", "--sort=taggerdate"], stderr=subprocess.STDOUT
+    )
+)
+version = tags.strip("'b\\n").split("\\n")[-1][1:]
+
+# Write C++ header file with version
 with open("src/cheby_version.hpp", "w") as fp:
-    fp.write(f'#include <string>\nconst std::string CHEBYVERSION = "{VERSION}";')
+    fp.write(f'#include <string>\nconst std::string CHEBYVERSION = "{version}";')
 
 # Convert distutils Windows platform specifiers to CMake -A arguments
 PLAT_TO_CMAKE = {
@@ -132,7 +140,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name="cheby",
-    version=VERSION,
+    version=version,
     author="Gwénaël Gabard",
     author_email="gwenael.gabard@univ-lemans.fr",
     description="Functions represented as Chebyshev series",
