@@ -105,7 +105,7 @@ class Basis {
 
     const ValueMatrix DirichletMatrix() const {
         const Index N = order + 1;
-        ValueMatrix matrix(N, N);
+        ValueMatrix matrix = ValueMatrix::Zero(N, N);
         for (Index i = 2; i < N; ++i) {
             matrix(i, i) = 0.5;
             matrix(i - 2, i) = -0.5;
