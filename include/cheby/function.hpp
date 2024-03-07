@@ -237,14 +237,16 @@ class Function {
         return (Function(xmin, xmax, coef.conjugate()));
     }
 
-    ValueMatrix ProductMatrix(const Index order) const {
-        const Index N = order + 1;
-        const Index M = coef.size();
-        ValueMatrix matrix = ValueMatrix::Zero(M + N, N);
-        for (int n = 0; n < N; ++n) {
-            for (int m = 0; m < M; ++m) {
-                matrix(m + n, n) += coef(m) / 2.0;
-                matrix(abs(m - n), n) += coef(m) / 2.0;
+    ValueMatrix ProductMatrix(const Index order, const int rows = -1) const {
+        const Index num_cols = order + 1;
+        const Index num_coefs = coef.size();
+        const Index num_rows = rows == -1 ? num_cols + num_coefs : rows;
+        ValueMatrix matrix = ValueMatrix::Zero(num_rows, num_cols);
+        for (int n = 0; n < num_cols; ++n) {
+            for (int m = 0; m < num_coefs; ++m) {
+                if (m + n < num_rows) matrix(m + n, n) += coef(m) / 2.0;
+                if (abs(m - n) < num_rows)
+                    matrix(abs(m - n), n) += coef(m) / 2.0;
             }
         }
         return (matrix);

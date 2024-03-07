@@ -56,7 +56,8 @@ void init_cheby(py::module &m) {
         .def("extrema", &RealFunction::Extrema)
         .def("pow", &RealFunction::Power)
         .def("__pow__", &RealFunction::Power)
-        .def("product_matrix", &RealFunction::ProductMatrix);
+        .def("product_matrix", &RealFunction::ProductMatrix, py::arg("order"),
+             py::arg("rows") = -1);
 
     py::class_<ComplexFunction>(m, "ComplexFunction")
         .def(py::init<std::function<ComplexFunction::ValueVector(
@@ -92,7 +93,8 @@ void init_cheby(py::module &m) {
         .def("extrema", &ComplexFunction::Extrema)
         .def("pow", &ComplexFunction::Power)
         .def("__pow__", &ComplexFunction::Power)
-        .def("product_matrix", &ComplexFunction::ProductMatrix);
+        .def("product_matrix", &ComplexFunction::ProductMatrix, py::arg("order"),
+             py::arg("rows") = -1);
 }
 
 PYBIND11_MODULE(cheby, m) {
