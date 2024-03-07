@@ -14,6 +14,7 @@ void init_cheby(py::module &m) {
     py::class_<Basis1D>(m, "Basis1D")
         .def(py::init<int, double, double>(), py::arg("order"),
              py::arg("start") = -1.0, py::arg("end") = 1.0)
+        .def("order", &Basis1D::Order)
         .def("points1", &Basis1D::Points1, py::arg("num_points") = -1)
         .def("points2", &Basis1D::Points2, py::arg("num_points") = -1)
         .def("eval", &Basis1D::Eval)

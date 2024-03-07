@@ -28,6 +28,8 @@ class Basis {
           const Parameter end = +1.0)
         : order(degree), xmin(start), xmax(end){};
 
+    const Index Order() const { return order; };
+
     const ParamVector Points1(int num_points = -1) const {
         if (num_points == 0) return ParamVector(0);
         if (num_points < 0) num_points = order + 1;
