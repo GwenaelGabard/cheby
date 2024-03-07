@@ -105,6 +105,24 @@ class Basis {
         return D;
     };
 
+    const ValueMatrix ProjectionMatrix() const {
+        const Index N = order + 1;
+        ValueMatrix matrix = ValueMatrix::Zero(N, N);
+        const Value jacobian = xmax - xmin;
+        Index q = 0;
+        for (Index m = 0; m < N; ++m) {
+            for (Index n = q; n <= m; n += 2) {
+                const Value sum = m + n;
+                const Value dif = m - n;
+                matrix(m, n) =
+                    jacobian / (1.0 - sum * sum) + jacobian / (1.0 - dif * dif);
+                matrix(n, m) = matrix(m, n);
+            }
+            q = 1 - q;
+        }
+        return matrix;
+    };
+
     const ValueMatrix DirichletMatrix() const {
         const Index N = order + 1;
         ValueMatrix matrix = ValueMatrix::Zero(N, N);
