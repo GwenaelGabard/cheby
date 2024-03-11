@@ -28,6 +28,8 @@ void init_cheby(py::module &m) {
                           RealFunction::ParamVector)>,
                       double, double, int>(),
              py::arg("f"), py::arg("start"), py::arg("end"), py::arg("N") = -1)
+        .def(py::init<double, double, RealFunction::CoefVector>(),
+             py::arg("start"), py::arg("end"), py::arg("coef"))
         .def("__call__", &RealFunction::Eval)
         .def("__add__", &Add<RealFunction, RealFunction, RealFunction>)
         .def("__add__", &Add<RealFunction, ComplexFunction, ComplexFunction>)
@@ -64,6 +66,8 @@ void init_cheby(py::module &m) {
                           ComplexFunction::ParamVector)>,
                       double, double, int>(),
              py::arg("f"), py::arg("start"), py::arg("end"), py::arg("N") = -1)
+        .def(py::init<double, double, ComplexFunction::CoefVector>(),
+             py::arg("start"), py::arg("end"), py::arg("coef"))
         .def("__call__", &ComplexFunction::Eval)
         .def("__add__", &Add<ComplexFunction, RealFunction, ComplexFunction>)
         .def("__add__", &Add<ComplexFunction, ComplexFunction, ComplexFunction>)
