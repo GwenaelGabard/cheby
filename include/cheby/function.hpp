@@ -8,6 +8,10 @@
 
 namespace cheby {
 
+/// @brief Add two functions.
+/// @param f1 The first function.
+/// @param f2 The second function.
+/// @return The sum of the two functions.
 template <typename T1, typename T2, typename outT>
 outT Add(const T1 &f1, const T2 &f2) {
     const typename T1::Index size1 = f1.coef.size();
@@ -32,6 +36,10 @@ outT Add(const T1 &f1, const T2 &f2) {
     }
 }
 
+/// @brief Subtract two functions.
+/// @param f1 The first function.
+/// @param f2 The second function.
+/// @return The difference of the two functions.
 template <typename T1, typename T2, typename outT>
 outT Sub(const T1 &f1, const T2 &f2) {
     const typename T1::Index size1 = f1.coef.size();
@@ -56,6 +64,10 @@ outT Sub(const T1 &f1, const T2 &f2) {
     }
 }
 
+/// @brief Multiply two functions.
+/// @param f1 The first function.
+/// @param f2 The second function.
+/// @return The product of the two functions.
 template <typename T1, typename T2, typename outT>
 outT Multiply(const T1 &f1, const T2 &f2) {
     const typename T1::Index size1 = f1.coef.size();
@@ -76,30 +88,59 @@ outT Multiply(const T1 &f1, const T2 &f2) {
     return (g);
 }
 
+/// @brief A class for representing functions as Chebyshev series.
+/// @tparam valueT The type of the values of the function.
+/// @tparam parameterT The type of the parameter of the function.
+/// @tparam indexT The type of the indices of the coefficients.
 template <typename valueT, typename parameterT = double,
           typename indexT = std::size_t>
 class Function {
    public:
+    /// @brief The type of the values of the function.
     using Value = valueT;
+    /// @brief The type of the parameter of the function.
     using Parameter = parameterT;
+    /// @brief The type of the indices of the coefficients.
     using Index = indexT;
+    /// @brief The type of a vector of coefficients.
     using CoefVector = Eigen::Array<Value, Eigen::Dynamic, 1>;
+    /// @brief The type of a vector of values.
     using ValueVector = Eigen::Array<Value, Eigen::Dynamic, 1>;
+    /// @brief The type of a matrix of values.
     using ValueMatrix = Eigen::Matrix<Value, Eigen::Dynamic, Eigen::Dynamic>;
+    /// @brief The type of a vector of parameters.
     using ParamVector = Eigen::Array<Parameter, Eigen::Dynamic, 1>;
+    /// @brief The type of the real part of a value.
     using RealPart = typename Eigen::NumTraits<Value>::Real;
+    /// @brief The type of the Chebyshev basis.
+    using Basis = cheby::Basis<Value, Parameter, Index>;
 
     static constexpr double rel_tol = 1.e-14;
     static constexpr Index tail_length = 8;
 
+    /// @brief The vector of coefficients.
     CoefVector coef;
-    Parameter xmin, xmax;
+    /// @brief The start of the interval.
+    Parameter xmin;
+    /// @brief The end of the interval.
+    Parameter xmax;
 
+    /// @brief Default constructor for a function.
     Function() : xmin(-1.0), xmax(+1.0), coef(){};
 
+    /// @brief Construct a Chebyshev representation of a function from a start,
+    /// an end, and a vector of coefficients.
+    /// @param start The start of the interval.
+    /// @param end The end of the interval.
+    /// @param c The vector of coefficients.
     Function(const Parameter start, const Parameter end, const CoefVector &c)
         : xmin(start), xmax(end), coef(c){};
 
+    /// @brief Construct a Chebyshev representation of function from a start, an
+    /// end, and the function.
+    /// @param f The function to represent.
+    /// @param start The start of the interval.
+    /// @param end The end of the interval.
     Function(std::function<ValueVector(ParamVector)> f, const Parameter start,
              const Parameter end, const int N = -1) {
         xmin = start;
@@ -115,6 +156,12 @@ class Function {
         }
     };
 
+    /// @brief Calculate the coefficients of the Chebyshev representation of a
+    /// function.
+    /// @param f The function to represent.
+    /// @param xmin The start of the interval.
+    /// @param xmax The end of the interval.
+    /// @param N The number of coefficients to calculate.
     void ComputeCoef(std::function<ValueVector(ParamVector)> f,
                      const Parameter xmin, const Parameter xmax, const int N) {
         auto xi = ParamVector::LinSpaced(N + 1, 0.0, EIGEN_PI).cos();
@@ -132,8 +179,17 @@ class Function {
         coef[coef.size() - 1] /= 2;
     }
 
-    const CoefVector &Coef() const { return (coef); }
+    /// @brief Get the Chebyshev basis of the function.
+    /// @return The Chebyshev basis of the function.
+    Basis GetBasis() const {
+        Basis b(coef.size() - 1, xmin, xmax);
+        return (b);
+    }
 
+    /// @brief Get the number of coefficients to trim from the end of the
+    /// coefficient vector.
+    /// @return The number of coefficients to trim from the end of the
+    /// coefficient vector.
     Index TailLength() const {
         if (coef.size() == 0) return (0);
         Index n = coef.size() - 1;
@@ -142,8 +198,12 @@ class Function {
         return (coef.size() - n - 1);
     }
 
+    /// @brief Trim the coefficient vector.
     void Trim() { coef.conservativeResize(coef.size() - TailLength()); }
 
+    /// @brief Evaluate the function at a number of points.
+    /// @param x The points at which to evaluate the function.
+    /// @return The values of the function at the given points.
     ValueVector Eval(const ParamVector &x) const {
         if (coef.size() == 0) return (ValueVector::Zero(x.size()));
         if (coef.size() == 1) return (ValueVector::Constant(x.size(), coef(0)));
@@ -163,6 +223,9 @@ class Function {
         return (xi * fk - a + coef(0));
     }
 
+    /// @brief  Evaluate the derivative of the function at a number of points.
+    /// @param x The points at which to evaluate the derivative of the function.
+    /// @return The values of the derivative of the function at the given points.
     Function Derivative() const {
         if (coef.size() < 2) return (Function(xmin, xmax, CoefVector()));
         const Index N = coef.size() - 1;
@@ -179,6 +242,8 @@ class Function {
         return (d);
     }
 
+    /// @brief Compute the primitive (anti-derivative) of the function.
+    /// @return The primitive of the function.
     Function Primitive() const {
         if (coef.size() == 0) return (Function(xmin, xmax, CoefVector()));
         if (coef.size() == 1) {
@@ -204,6 +269,8 @@ class Function {
         return (d);
     }
 
+    /// @brief Compute the integral of the function over the whole interval.
+    /// @return The integral of the function over the whole interval.
     Value Integral() const {
         if (coef.size() == 0) return (0.0);
         if (coef.size() == 1) return (coef(0) * (xmax - xmin));
@@ -217,6 +284,10 @@ class Function {
         return (integral * (xmax - xmin));
     }
 
+    /// @brief Compute the integral of the function over a subinterval.
+    /// @param a The start of the subinterval.
+    /// @param b The end of the subinterval.
+    /// @return The integral of the function over the subinterval.
     Value Integral(const Parameter a, const Parameter b) const {
         ParamVector bounds(2);
         bounds(0) = a;
@@ -225,18 +296,33 @@ class Function {
         return (f(1) - f(0));
     }
 
+    /// @brief Construct another function with the real part of the function.
+    /// @return The real part of the function.
     Function<RealPart, Parameter, Index> Real() const {
         return (Function<RealPart, Parameter, Index>(xmin, xmax, coef.real()));
     }
 
+    /// @brief Construct another function with the imaginary part of the
+    /// function.
+    /// @return The imaginary part of the function.
     Function<RealPart, Parameter, Index> Imag() const {
         return (Function<RealPart, Parameter, Index>(xmin, xmax, coef.imag()));
     }
 
+    /// @brief Construct another function with the complex conjugate of the
+    /// function.
+    /// @return The complex conjugate of the function.
     Function Conjugate() const {
         return (Function(xmin, xmax, coef.conjugate()));
     }
 
+    /// @brief Compute the product matrix of the function.
+    /// The product matrix is a matrix that, when multiplied by the vector of
+    /// coefficients of another function, gives the coefficients of the product
+    /// of the two functions.
+    /// @param order The order of the product matrix.
+    /// @param rows The number of rows of the product matrix.
+    /// @return The product matrix of the function.
     ValueMatrix ProductMatrix(const Index order, const int rows = -1) const {
         const Index num_cols = order + 1;
         const Index num_coefs = coef.size();
@@ -252,18 +338,25 @@ class Function {
         return (matrix);
     }
 
+    /// @brief Compute the L2 norm of the function.
+    /// @return The L2 norm of the function.
     RealPart NormL2() const {
         const auto product =
             Multiply<Function, Function, Function>(*this, Conjugate());
         return (sqrt(product.Real().Integral()));
     }
 
+    /// @brief Compute the H1 norm of the function.
+    /// @param alpha The weight of the derivative in the norm.
+    /// @return The H1 norm of the function.
     RealPart NormH1(const RealPart alpha = 1.0) {
         const auto norm_f = NormL2();
         const auto norm_df = Derivative().NormL2();
         return (sqrt(norm_f * norm_f + alpha * norm_df * norm_df));
     }
 
+    /// @brief Compute the colleague matrix of the function.
+    /// @return The colleague matrix of the function.
     ValueMatrix ColleagueMatrix() const {
         const Index N = coef.size() - 1;
         ValueMatrix matrix = ValueMatrix::Zero(N, N);
@@ -277,6 +370,8 @@ class Function {
         return (matrix);
     }
 
+    /// @brief Compute the roots of the function.
+    /// @return A vector of roots of the function.
     ParamVector Roots() const {
         auto values = BalanceMatrix(ColleagueMatrix()).eigenvalues();
         ParamVector roots(values.size());
@@ -292,8 +387,13 @@ class Function {
         return (roots);
     }
 
+    /// @brief Compute the extrema of the function.
+    /// @return A vector of extrema of the function.
     ParamVector Extrema() const { return (Derivative().Roots()); }
 
+    /// @brief Compute the power of the function.
+    /// @param n The power to which to raise the function.
+    /// @return The power of the function.
     Function Power(const Index n) const {
         if (n == 0) {
             CoefVector g(1);
@@ -323,6 +423,11 @@ class Function {
     }
 };
 
+/// @brief Construct a constant function.
+/// @param xmin The start of the interval.
+/// @param xmax The end of the interval.
+/// @param c The constant value of the function.
+/// @return The constant function.
 template <typename valueT, typename parameterT = double,
           typename indexT = std::size_t>
 Function<valueT, parameterT, indexT> Constant(const parameterT xmin,

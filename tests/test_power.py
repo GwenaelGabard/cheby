@@ -17,9 +17,9 @@ def test_power_real(fun, xmin, xmax, order):
     ffn = fun_from_expr(x, fun**order)
     f_ex = RealFunction(ffn, xmin, xmax)
 
-    delta = sub_vec(f_ex.coef(), f.coef())
+    delta = sub_vec(f_ex.coef, f.coef)
     error = np.max(np.abs(delta))
-    norm = np.max(np.abs(f_ex.coef()))
+    norm = np.max(np.abs(f_ex.coef))
 
     if norm == 0.0:
         assert error < abs_tol
@@ -36,9 +36,9 @@ def test_power_complex(fun, xmin, xmax, order):
     ffn = fun_from_expr(x, fun**order)
     f_ex = ComplexFunction(ffn, xmin, xmax)
 
-    delta = sub_vec(f_ex.coef(), f.coef())
+    delta = sub_vec(f_ex.coef, f.coef)
     error = np.max(np.abs(delta))
-    norm = np.max(np.abs(f_ex.coef()))
+    norm = np.max(np.abs(f_ex.coef))
 
     if norm == 0.0:
         assert error < abs_tol

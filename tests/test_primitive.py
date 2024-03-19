@@ -19,10 +19,10 @@ def test_real_primitive(fun, xmin, xmax):
     if_ex = RealFunction(iff, xmin, xmax)
     if_num = f.primitive()
 
-    delta = sub_vec(if_ex.coef(), if_num.coef())
+    delta = sub_vec(if_ex.coef, if_num.coef)
     delta[0] = 0.0
     error = np.max(np.abs(delta))
-    norm = np.max(np.abs(if_ex.coef()))
+    norm = np.max(np.abs(if_ex.coef))
 
     if norm == 0.0:
         assert error < abs_tol
@@ -41,10 +41,10 @@ def test_complex_primitive(fun, xmin, xmax):
     if_ex = ComplexFunction(iff, xmin, xmax)
     if_num = f.primitive()
 
-    delta = sub_vec(if_ex.coef(), if_num.coef())
+    delta = sub_vec(if_ex.coef, if_num.coef)
     delta[0] = 0.0
     error = np.max(np.abs(delta))
-    norm = np.max(np.abs(if_ex.coef()))
+    norm = np.max(np.abs(if_ex.coef))
 
     if norm == 0.0:
         assert error < abs_tol

@@ -26,11 +26,11 @@ def test_matprod_rr(fun1, fun2, xmin, xmax):
     f1 = RealFunction(ff1, xmin, xmax)
     f2 = RealFunction(ff2, xmin, xmax)
     p_ex = RealFunction(fp, xmin, xmax)
-    c_num = f1.product_matrix(len(f2.coef()) - 1) @ f2.coef()[:, None]
+    c_num = f1.product_matrix(len(f2.coef) - 1) @ f2.coef[:, None]
 
-    delta = sub_vec(p_ex.coef(), c_num.flatten())
+    delta = sub_vec(p_ex.coef, c_num.flatten())
     error = np.max(np.abs(delta))
-    norm = np.max(np.abs(p_ex.coef()))
+    norm = np.max(np.abs(p_ex.coef))
 
     if norm == 0.0:
         assert error < abs_tol
@@ -49,11 +49,11 @@ def test_matprod_cr(fun1, fun2, xmin, xmax):
     f1 = ComplexFunction(ff1, xmin, xmax)
     f2 = RealFunction(ff2, xmin, xmax)
     p_ex = ComplexFunction(fp, xmin, xmax)
-    c_num = f1.product_matrix(len(f2.coef()) - 1) @ f2.coef()[:, None]
+    c_num = f1.product_matrix(len(f2.coef) - 1) @ f2.coef[:, None]
 
-    delta = sub_vec(p_ex.coef(), c_num.flatten())
+    delta = sub_vec(p_ex.coef, c_num.flatten())
     error = np.max(np.abs(delta))
-    norm = np.max(np.abs(p_ex.coef()))
+    norm = np.max(np.abs(p_ex.coef))
 
     if norm == 0.0:
         assert error < abs_tol
@@ -72,11 +72,11 @@ def test_matprod_rc(fun1, fun2, xmin, xmax):
     f1 = RealFunction(ff1, xmin, xmax)
     f2 = ComplexFunction(ff2, xmin, xmax)
     p_ex = ComplexFunction(fp, xmin, xmax)
-    c_num = f1.product_matrix(len(f2.coef()) - 1) @ f2.coef()[:, None]
+    c_num = f1.product_matrix(len(f2.coef) - 1) @ f2.coef[:, None]
 
-    delta = sub_vec(p_ex.coef(), c_num.flatten())
+    delta = sub_vec(p_ex.coef, c_num.flatten())
     error = np.max(np.abs(delta))
-    norm = np.max(np.abs(p_ex.coef()))
+    norm = np.max(np.abs(p_ex.coef))
 
     if norm == 0.0:
         assert error < abs_tol
@@ -95,11 +95,11 @@ def test_matprod_cc(fun1, fun2, xmin, xmax):
     f1 = ComplexFunction(ff1, xmin, xmax)
     f2 = ComplexFunction(ff2, xmin, xmax)
     p_ex = ComplexFunction(fp, xmin, xmax)
-    c_num = f1.product_matrix(len(f2.coef()) - 1) @ f2.coef()[:, None]
+    c_num = f1.product_matrix(len(f2.coef) - 1) @ f2.coef[:, None]
 
-    delta = sub_vec(p_ex.coef(), c_num.flatten())
+    delta = sub_vec(p_ex.coef, c_num.flatten())
     error = np.max(np.abs(delta))
-    norm = np.max(np.abs(p_ex.coef()))
+    norm = np.max(np.abs(p_ex.coef))
 
     if norm == 0.0:
         assert error < abs_tol

@@ -28,9 +28,9 @@ def test_multiply_rr(fun1, fun2, xmin, xmax):
     p_ex = RealFunction(fp, xmin, xmax)
     p_num = f1 * f2
 
-    delta = sub_vec(p_ex.coef(), p_num.coef())
+    delta = sub_vec(p_ex.coef, p_num.coef)
     error = np.max(np.abs(delta))
-    norm = np.max(np.abs(p_ex.coef()))
+    norm = np.max(np.abs(p_ex.coef))
 
     if norm == 0.0:
         assert error < abs_tol
@@ -51,9 +51,9 @@ def test_multiply_cr(fun1, fun2, xmin, xmax):
     p_ex = ComplexFunction(fp, xmin, xmax)
     p_num = f1 * f2
 
-    delta = sub_vec(p_ex.coef(), p_num.coef())
+    delta = sub_vec(p_ex.coef, p_num.coef)
     error = np.max(np.abs(delta))
-    norm = np.max(np.abs(p_ex.coef()))
+    norm = np.max(np.abs(p_ex.coef))
 
     if norm == 0.0:
         assert error < abs_tol
@@ -74,9 +74,9 @@ def test_multiply_rc(fun1, fun2, xmin, xmax):
     p_ex = ComplexFunction(fp, xmin, xmax)
     p_num = f1 * f2
 
-    delta = sub_vec(p_ex.coef(), p_num.coef())
+    delta = sub_vec(p_ex.coef, p_num.coef)
     error = np.max(np.abs(delta))
-    norm = np.max(np.abs(p_ex.coef()))
+    norm = np.max(np.abs(p_ex.coef))
 
     if norm == 0.0:
         assert error < abs_tol
@@ -97,9 +97,9 @@ def test_multiply_cc(fun1, fun2, xmin, xmax):
     p_ex = ComplexFunction(fp, xmin, xmax)
     p_num = f1 * f2
 
-    delta = sub_vec(p_ex.coef(), p_num.coef())
+    delta = sub_vec(p_ex.coef, p_num.coef)
     error = np.max(np.abs(delta))
-    norm = np.max(np.abs(p_ex.coef()))
+    norm = np.max(np.abs(p_ex.coef))
 
     if norm == 0.0:
         assert error < abs_tol

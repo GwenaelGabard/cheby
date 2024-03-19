@@ -7,29 +7,49 @@
 
 namespace cheby {
 
+/// @brief A basis of Chebyshev polynomials of the first kind.
+///
+/// @tparam valueT The type of the values of the basis functions.
+/// @tparam parameterT The type of the parameter of the basis functions.
+/// @tparam indexT The type of the indices of the basis functions.
 template <typename valueT, typename parameterT = double,
           typename indexT = std::size_t>
 class Basis {
    public:
+    /// @brief The type of the values of the basis.
     using Value = valueT;
+    /// @brief The type of the parameters of the basis.
     using Parameter = parameterT;
+    /// @brief The type of the indices of the basis.
     using Index = indexT;
+    /// @brief The type of a vector of values.
     using ValueVector = Eigen::Array<Value, Eigen::Dynamic, 1>;
+    /// @brief The type of a matrix of values.
     using ValueMatrix = Eigen::Array<Value, Eigen::Dynamic, Eigen::Dynamic>;
+    /// @brief The type of a vector of parameters.
     using ParamVector = Eigen::Array<Parameter, Eigen::Dynamic, 1>;
 
     static constexpr double rel_tol = 1.e-14;
     static constexpr Index tail_length = 8;
 
+    /// @brief The order of the basis.
     Index order;
-    Parameter xmin, xmax;
+    /// @brief The start of the interval.
+    Parameter xmin;
+    /// @brief The end of the interval.
+    Parameter xmax;
 
+    /// @brief Construct a basis.
+    /// @param degree The order of the basis.
+    /// @param start The start of the interval.
+    /// @param end The end of the interval.
     Basis(const Index degree, const Parameter start = -1.0,
           const Parameter end = +1.0)
         : order(degree), xmin(start), xmax(end){};
 
-    const Index Order() const { return order; };
-
+    /// @brief Get the Chebyshev points of the first type.
+    /// @param num_points The number of points to generate.
+    /// @return A vector with the coordinates of the points.
     const ParamVector Points1(int num_points = -1) const {
         if (num_points == 0) return ParamVector(0);
         if (num_points < 0) num_points = order + 1;
@@ -43,6 +63,9 @@ class Basis {
         return points;
     };
 
+    /// @brief Get the Chebyshev points of the second type.
+    /// @param num_points The number of points to generate.
+    /// @return A vector with the coordinates of the points.
     const ParamVector Points2(int num_points = -1) const {
         if ((num_points == 0) || (num_points == 1)) return ParamVector(0);
         if (num_points < 0) num_points = order + 1;
@@ -55,9 +78,15 @@ class Basis {
         return points;
     };
 
+    /// @brief Evaluate the Chebyshev polynomials of the first kind at the given
+    /// points.
+    /// @param x A vector of points at which to evaluate the polynomials.
+    /// @return The matrix of polynomial values at the given points (each row is
+    /// a point, each column is a polynomial).
     ValueMatrix Eval(const ParamVector x) const {
         const Index N = order + 1;
         ValueMatrix T(x.size(), N);
+        // Optimisation: store 2\xi instead of \xi
         const ParamVector xi = (x - xmin) * (4.0 / (xmax - xmin)) - 2.0;
         T.col(0) = 1.0;
         if (N == 1) return T;
@@ -68,9 +97,16 @@ class Basis {
         return T;
     };
 
+    /// @brief Evaluate the derivatives of the Chebyshev polynomials of the first
+    /// kind at the given points.
+    /// @param x A vector of points at which to evaluate the polynomials.
+    /// @param D The maximum order of the derivatives to evaluate.
+    /// @return A vector of matrices of polynomial derivatives at the given
+    /// points (each row is a point, each column is a polynomial).
     std::vector<ValueMatrix> Derivatives(const ParamVector x,
                                          const Index D) const {
         const Index N = order + 1;
+        // Optimisation: store 2\xi instead of \xi
         const ParamVector xi = (x - xmin) * (4.0 / (xmax - xmin)) - 2.0;
         std::vector<ValueMatrix> T(D + 1);
         for (auto &t : T) t = ValueMatrix::Zero(x.size(), N);
@@ -89,6 +125,9 @@ class Basis {
         return T;
     };
 
+    /// @brief Provide the differentiation matrix for the Chebyshev polynomials
+    /// of the first kind.
+    /// @return The square differentiation matrix.
     const ValueMatrix DiffMatrix() const {
         const Index N = order + 1;
         ValueMatrix D = ValueMatrix::Zero(N, N);
@@ -105,6 +144,9 @@ class Basis {
         return D;
     };
 
+    /// @brief Provide the projection matrix for the Chebyshev polynomials of the
+    /// first kind.
+    /// @return The square projection matrix.
     const ValueMatrix ProjectionMatrix() const {
         const Index N = order + 1;
         ValueMatrix matrix = ValueMatrix::Zero(N, N);
@@ -123,6 +165,12 @@ class Basis {
         return matrix;
     };
 
+    /// @brief Provide the matrix for the Dirichlet basis recombination.
+    /// The recombined basis is zero at the end points, except for the first two
+    /// basis functions. The first function is 1 and 0 at the start and end
+    /// points, respectively. The second function is 0 and 1 at the start and end
+    /// points, respectively.
+    /// @return The square recombination matrix.
     const ValueMatrix DirichletMatrix() const {
         const Index N = order + 1;
         ValueMatrix matrix = ValueMatrix::Zero(N, N);

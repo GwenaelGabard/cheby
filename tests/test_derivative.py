@@ -18,9 +18,9 @@ def test_real_derivative(fun, xmin, xmax):
     df_ex = RealFunction(dff, xmin, xmax)
     df_num = f.derivative()
 
-    delta = sub_vec(df_ex.coef(), df_num.coef())
+    delta = sub_vec(df_ex.coef, df_num.coef)
     error = np.max(np.abs(delta))
-    norm = np.max(np.abs(df_ex.coef()))
+    norm = np.max(np.abs(df_ex.coef))
 
     if norm == 0.0:
         assert error < abs_tol
@@ -39,9 +39,9 @@ def test_complex_derivative(fun, xmin, xmax):
     df_ex = ComplexFunction(dff, xmin, xmax)
     df_num = f.derivative()
 
-    delta = sub_vec(df_ex.coef(), df_num.coef())
+    delta = sub_vec(df_ex.coef, df_num.coef)
     error = np.max(np.abs(delta))
-    norm = np.max(np.abs(df_ex.coef()))
+    norm = np.max(np.abs(df_ex.coef))
 
     if norm == 0.0:
         assert error < abs_tol

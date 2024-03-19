@@ -12,8 +12,8 @@ def test_real_real_part(fun, xmin, xmax):
     ff = fun_from_expr(x, fun)
     f = RealFunction(ff, xmin, xmax)
 
-    c_ex = f.coef().real
-    c_num = f.real().coef()
+    c_ex = f.coef.real
+    c_num = f.real().coef
 
     delta = sub_vec(c_ex, c_num)
     error = np.max(np.abs(delta))
@@ -30,8 +30,8 @@ def test_real_imag_part(fun, xmin, xmax):
     ff = fun_from_expr(x, fun)
     f = RealFunction(ff, xmin, xmax)
 
-    c_ex = f.coef().imag
-    c_num = f.imag().coef()
+    c_ex = f.coef.imag
+    c_num = f.imag().coef
 
     delta = sub_vec(c_ex, c_num)
     error = np.max(np.abs(delta))
@@ -48,8 +48,8 @@ def test_real_conj(fun, xmin, xmax):
     ff = fun_from_expr(x, fun)
     f = RealFunction(ff, xmin, xmax)
 
-    c_ex = f.coef().conj()
-    c_num = f.conj().coef()
+    c_ex = f.coef.conj()
+    c_num = f.conj().coef
 
     delta = sub_vec(c_ex, c_num)
     error = np.max(np.abs(delta))
@@ -66,8 +66,8 @@ def test_complex_real_part(fun, xmin, xmax):
     ff = fun_from_expr(x, fun)
     f = ComplexFunction(ff, xmin, xmax)
 
-    c_ex = f.coef().real
-    c_num = f.real().coef()
+    c_ex = f.coef.real
+    c_num = f.real().coef
 
     delta = sub_vec(c_ex, c_num)
     error = np.max(np.abs(delta))
@@ -84,8 +84,8 @@ def test_complex_imag_part(fun, xmin, xmax):
     ff = fun_from_expr(x, fun)
     f = ComplexFunction(ff, xmin, xmax)
 
-    c_ex = f.coef().imag
-    c_num = f.imag().coef()
+    c_ex = f.coef.imag
+    c_num = f.imag().coef
 
     delta = sub_vec(c_ex, c_num)
     error = np.max(np.abs(delta))
@@ -102,8 +102,8 @@ def test_complex_conj(fun, xmin, xmax):
     ff = fun_from_expr(x, fun)
     f = ComplexFunction(ff, xmin, xmax)
 
-    c_ex = f.coef().conj()
-    c_num = f.conj().coef()
+    c_ex = f.coef.conj()
+    c_num = f.conj().coef
 
     delta = sub_vec(c_ex, c_num)
     error = np.max(np.abs(delta))
