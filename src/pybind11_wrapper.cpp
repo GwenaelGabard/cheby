@@ -107,6 +107,7 @@ void init_cheby(py::module &m) {
         .def("extrema", &ComplexFunction::Extrema)
         .def("pow", &ComplexFunction::Power)
         .def("__pow__", &ComplexFunction::Power)
+        .def("monomials", &ComplexFunction::Monomials)
         .def("product_matrix", &ComplexFunction::ProductMatrix, py::arg("order"),
              py::arg("rows") = -1);
 }
