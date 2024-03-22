@@ -23,7 +23,8 @@ void init_cheby(py::module &m) {
         .def("derivatives", &Basis1D::Derivatives)
         .def("dirichlet", &Basis1D::DirichletMatrix)
         .def("diff_matrix", &Basis1D::DiffMatrix)
-        .def("projection_matrix", &Basis1D::ProjectionMatrix);
+        .def("projection_matrix", &Basis1D::ProjectionMatrix)
+        .def("monomial_matrix", &Basis1D::MonomialMatrix);
 
     py::class_<RealFunction>(m, "RealFunction")
         .def(py::init<std::function<RealFunction::ValueVector(

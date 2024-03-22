@@ -184,6 +184,23 @@ class Basis {
         matrix(1, 1) = 0.5;
         return matrix;
     }
+
+    /// @brief Provide the matrix to convert the Chebyshev coefficients into
+    /// polynomial coefficients.
+    /// @return A square matrix. The nth column contains the polynomial
+    /// coefficients of the nth Chebyshev polynomial.
+    const ValueMatrix MonomialMatrix() const {
+        const Index N = order + 1;
+        ValueMatrix matrix = ValueMatrix::Zero(N, N);
+        matrix(0, 0) = 1.0;
+        matrix(1, 1) = 1.0;
+        for (Index i = 2; i < N; ++i) {
+            matrix(Eigen::seq(1, N - 1), i) +=
+                2.0 * matrix(Eigen::seq(0, N - 2), i - 1);
+            matrix.col(i) -= matrix.col(i - 2);
+        }
+        return matrix;
+    }
 };
 
 }  // namespace cheby
