@@ -64,6 +64,7 @@ void init_cheby(py::module &m) {
         .def("extrema", &RealFunction::Extrema)
         .def("pow", &RealFunction::Power)
         .def("__pow__", &RealFunction::Power)
+        .def("monomials", &RealFunction::Monomials)
         .def("product_matrix", &RealFunction::ProductMatrix, py::arg("order"),
              py::arg("rows") = -1);
 

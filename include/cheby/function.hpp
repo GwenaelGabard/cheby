@@ -449,6 +449,28 @@ class Function {
         }
         return (Function(xmin, xmax, fn));
     }
+
+    /// @brief Compute the coefficients of the corresponding polynomials.
+    /// @return The coefficients of the corresponding polynomials.
+    ValueVector Monomials() const {
+        const Index N = coef.size();
+        ValueVector a = ValueVector::Zero(N);
+        ValueVector b = ValueVector::Zero(N);
+        ValueVector c = ValueVector::Zero(N);
+        auto x = &a;
+        auto y = &b;
+        a(0) = 1.0;
+        b(1) = 1.0;
+        c(0) = coef(0);
+        c(1) = coef(1);
+        for (Index n = 2; n < N; ++n) {
+            x->head(n) *= -1.0;
+            x->segment(1, n) += 2 * y->head(n);
+            c.head(n + 1) += x->head(n + 1) * coef(n);
+            std::swap(x, y);
+        }
+        return (c);
+    }
 };
 
 /// @brief Construct a constant function.
