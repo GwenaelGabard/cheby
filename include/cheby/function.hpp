@@ -391,6 +391,35 @@ class Function {
     /// @return A vector of extrema of the function.
     ParamVector Extrema() const { return (Derivative().Roots()); }
 
+    /// @brief Multiply two coefficient vectors.
+    /// @param c1 The first coefficient vector.
+    /// @param c2 The second coefficient vector.
+    /// @param tol The tolerance used when trimming the result.
+    /// @return The product of the two coefficient vectors.
+    static CoefVector MultiplyCoef(const CoefVector &c1, const CoefVector &c2,
+                                   const double tol = rel_tol) {
+        const Index size1 = c1.size();
+        const Index size2 = c2.size();
+        CoefVector c = CoefVector::Zero(size1 + size2);
+        Value p;
+        for (int i1 = 0; i1 < size1; ++i1) {
+            for (int i2 = 0; i2 < size2; ++i2) {
+                p = c1(i1) * c2(i2);
+                const auto j = abs(i1 - i2);
+                c(i1 + i2) = c(i1 + i2) + p;
+                c(j) = c(j) + p;
+            }
+        }
+        c /= 2.0;
+        if (c.size() > 0) {
+            Index n = c.size() - 1;
+            const double threshold = c.abs().maxCoeff() * tol;
+            while ((abs(c(n)) <= threshold) & (n > 0)) n--;
+            c.conservativeResize(n + 1);
+        }
+        return (c);
+    }
+
     /// @brief Compute the power of the function.
     /// @param n The power to which to raise the function.
     /// @return The power of the function.
