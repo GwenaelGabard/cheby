@@ -430,25 +430,24 @@ class Function {
             return (Function(xmin, xmax, g));
         }
         if (n == 1) return (*this);
-        auto f2 = Multiply<Function, Function, Function>(*this, *this);
-        if (n == 2) return (f2);
+        auto c2 = MultiplyCoef(coef, coef);
+        if (n == 2) return (Function(xmin, xmax, c2));
         const Index k = Index(log2(n)) + 1;
-        std::vector<Function> f(k);
-        f[0] = *this;
-        f[1] = f2;
-        for (Index i = 2; i < k; ++i)
-            f[i] = Multiply<Function, Function, Function>(f[i - 1], f[i - 1]);
+        std::vector<CoefVector> f(k);
+        f[0] = coef;
+        f[1] = c2;
+        for (Index i = 2; i < k; ++i) f[i] = MultiplyCoef(f[i - 1], f[i - 1]);
         Index p = 1 << (k - 1);
         Index m = n - p;
-        Function fn = f[k - 1];
+        CoefVector fn = f[k - 1];
         for (int i = k - 2; i >= 0; --i) {
             p >>= 1;
             if (m >= p) {
-                fn = Multiply<Function, Function, Function>(fn, f[i]);
+                fn = MultiplyCoef(fn, f[i]);
                 m -= p;
             }
         }
-        return (fn);
+        return (Function(xmin, xmax, fn));
     }
 };
 
