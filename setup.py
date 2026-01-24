@@ -8,12 +8,20 @@ from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
 # Get version from the latest git tag
-tags = str(
-    subprocess.check_output(
+try:
+    tags_output = subprocess.check_output(
         ["git", "tag", "--sort=refname"], stderr=subprocess.STDOUT
-    )
-)
-version = tags.strip("'b\\n").split("\\n")[-1][1:]
+    ).decode().strip()
+    if tags_output:
+        # Get the latest tag and remove the 'v' prefix
+        latest_tag = tags_output.split('\n')[-1]
+        version = latest_tag[1:] if latest_tag.startswith('v') else latest_tag
+    else:
+        # No tags found, use a development version
+        version = "0.0.0-dev"
+except subprocess.CalledProcessError:
+    # Git command failed, use development version
+    version = "0.0.0-dev"
 
 # Write C++ header file with version
 with open("src/cheby_version.hpp", "w") as fp:
