@@ -51,5 +51,12 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         path: dist
+    - name: Collect wheels
+      run: |
+        mkdir -p dist
+        # Move all wheel files from subdirectories into dist root
+        find dist -type f -name '*.whl' -exec mv -n '{}' dist/ \;
+        # Remove now-empty directories left by download-artifact
+        find dist -mindepth 1 -type d -empty -delete
     - name: Publish
       uses: pypa/gh-action-pypi-publish@v1.13.0
