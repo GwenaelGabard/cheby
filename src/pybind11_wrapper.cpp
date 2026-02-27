@@ -22,6 +22,7 @@ void init_cheby(py::module &m) {
         .def("eval", &Basis1D::Eval)
         .def("derivatives", &Basis1D::Derivatives)
         .def("dirichlet", &Basis1D::DirichletMatrix)
+        .def("neumann", &Basis1D::NeumannMatrix)
         .def("diff_matrix", &Basis1D::DiffMatrix)
         .def("projection_matrix", &Basis1D::ProjectionMatrix)
         .def("monomial_matrix", &Basis1D::MonomialMatrix);
