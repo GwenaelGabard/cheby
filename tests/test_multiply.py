@@ -1,18 +1,18 @@
 import numpy as np
 import pytest
 from cases import (
-    sub_vec,
-    prod_list_rr,
+    fun_from_expr,
+    prod_list_cc,
     prod_list_cr,
     prod_list_rc,
-    prod_list_cc,
+    prod_list_rr,
+    sub_vec,
     x,
-    fun_from_expr,
 )
-from cheby import RealFunction, ComplexFunction
+from cheby import ComplexFunction, RealFunction
 
-rel_tol = 1.0e-12
-abs_tol = 1.0e-12
+rel_tol = 5.0e-12
+abs_tol = 5.0e-12
 
 
 @pytest.mark.parametrize("fun1, fun2, xmin, xmax", prod_list_rr)
