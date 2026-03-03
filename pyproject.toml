@@ -2,6 +2,7 @@
 requires = [
     "setuptools>=69",
     "setuptools_scm[toml]>=8",
+    "packaging>=24.2",
     "wheel",
     "cmake>=3.18",
     "pybind11>=2.11",
