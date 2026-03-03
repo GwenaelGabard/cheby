@@ -1,0 +1,53 @@
+include LICENSE
+include README.md
+include CMakeLists.txt
+include .gitmodules
+
+graft src
+graft include
+graft externals/Eigen/Eigen
+graft externals/Eigen/unsupported/Eigen
+include externals/Eigen/COPYING.*
+include externals/Eigen/COPYING.README
+
+graft externals/pybind11/include
+graft externals/pybind11/tools
+graft externals/pybind11/pybind11
+include externals/pybind11/CMakeLists.txt
+include externals/pybind11/LICENSE
+include externals/pybind11/pyproject.toml
+graft tests
+
+global-exclude *.py[cod] __pycache__/*
+global-exclude .git
+global-exclude .gitignore
+global-exclude .gitattributes
+global-exclude .DS_Store
+global-exclude *.so
+prune build
+prune dist
+prune temp
+prune docs/_build
+prune .github
+prune .vscode
+prune docs
+prune examples
+prune sandbox
+
+prune externals/Eigen/bench
+prune externals/Eigen/blas
+prune externals/Eigen/ci
+prune externals/Eigen/cmake
+prune externals/Eigen/debug
+prune externals/Eigen/demos
+prune externals/Eigen/doc
+prune externals/Eigen/failtest
+prune externals/Eigen/scripts
+prune externals/Eigen/test
+prune externals/Eigen/unsupported/bench
+prune externals/Eigen/unsupported/doc
+prune externals/Eigen/unsupported/test
+
+prune externals/pybind11/.github
+prune externals/pybind11/docs
+prune externals/pybind11/tests

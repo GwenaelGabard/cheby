@@ -2,14 +2,26 @@ ci:
   autoupdate_commit_msg: "chore: update pre-commit hooks"
   autofix_commit_msg: "style: pre-commit fixes"
 
+exclude: |
+  (?x)^(
+    build/|
+    dist/|
+    temp/|
+    externals/|
+    docs/_build/
+  )
+
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.4.0
+  rev: v5.0.0
   hooks:
   - id: check-added-large-files
+  - id: check-ast
   - id: check-case-conflict
+  - id: check-json
   - id: check-merge-conflict
   - id: check-symlinks
+  - id: check-toml
   - id: check-yaml
     exclude: ^conda\.recipe/meta\.yaml$
   - id: debug-statements
@@ -19,23 +31,27 @@ repos:
   - id: trailing-whitespace
 
 - repo: https://github.com/psf/black-pre-commit-mirror
-  rev: 23.9.1
+  rev: 25.1.0
   hooks:
   - id: black
-    files: ^(tests)
+    files: ^(tests|sandbox)/.*\.py$
 
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: "v0.0.292"
+  rev: "v0.11.0"
   hooks:
+  - id: ruff-format
+    files: ^(tests|sandbox)/.*\.py$
   - id: ruff
+    files: ^(tests|sandbox)/.*\.py$
     args: ["--fix", "--show-fixes"]
 
 - repo: https://github.com/Lucas-C/pre-commit-hooks
-  rev: v1.5.4
+  rev: v1.5.5
   hooks:
   - id: remove-tabs
 
 - repo: https://github.com/pre-commit/mirrors-clang-format
-  rev: v13.0.0
+  rev: v19.1.7
   hooks:
   - id: clang-format
+    files: ^(src|include)/.*\.(h|hpp|c|cc|cpp)$

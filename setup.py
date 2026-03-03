@@ -6,22 +6,9 @@ from pathlib import Path
 
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
+from setuptools_scm import get_version
 
-# Get version from the latest git tag
-try:
-    tags_output = subprocess.check_output(
-        ["git", "tag", "--sort=refname"], stderr=subprocess.STDOUT
-    ).decode().strip()
-    if tags_output:
-        # Get the latest tag and remove the 'v' prefix
-        latest_tag = tags_output.split('\n')[-1]
-        version = latest_tag[1:] if latest_tag.startswith('v') else latest_tag
-    else:
-        # No tags found, use a development version
-        version = "0.0.0-dev"
-except subprocess.CalledProcessError:
-    # Git command failed, use development version
-    version = "0.0.0-dev"
+version = get_version(root=".", fallback_version="0.0.0-dev")
 
 # Write C++ header file with version
 with open("src/cheby_version.hpp", "w") as fp:
@@ -74,9 +61,6 @@ class CMakeBuild(build_ext):
         # (needed e.g. to build for ARM OSx on conda-forge)
         if "CMAKE_ARGS" in os.environ:
             cmake_args += [item for item in os.environ["CMAKE_ARGS"].split(" ") if item]
-
-        # In this example, we pass in the version to C++. You might not need to.
-        cmake_args += [f"-DEXAMPLE_VERSION_INFO={self.distribution.get_version()}"]
 
         if self.compiler.compiler_type != "msvc":
             # Using Ninja-build since it a) is available as a wheel and b)
@@ -143,21 +127,8 @@ class CMakeBuild(build_ext):
         )
 
 
-this_directory = Path(__file__).parent
-long_description = (this_directory / "README.md").read_text()
-
 setup(
-    name="cheby",
-    version=version,
-    author="Gwénaël Gabard",
-    author_email="gwenael.gabard@univ-lemans.fr",
-    description="Functions represented as Chebyshev series",
-    long_description=long_description,
-    long_description_content_type='text/markdown',
     ext_modules=[CMakeExtension("cheby")],
-    url="https://github.com/GwenaelGabard/cheby",
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
-    extras_require={"test": ["pytest>=6.0"]},
-    python_requires=">=3.7",
 )
