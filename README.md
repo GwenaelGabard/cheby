@@ -26,16 +26,31 @@ pip install .
 ```
 This will require a C++ compiler and `cmake`.
 
+### Dependency discovery order (source builds)
+
+When building from source with CMake, dependencies are resolved in this order:
+
+- `pybind11`:
+    1. `find_package(pybind11 CONFIG)`
+    2. Python-provided CMake package path (`python -m pybind11 --cmakedir`)
+    3. Vendored submodule (`externals/pybind11`)
+- `Eigen3`:
+    1. `find_package(Eigen3 CONFIG)`
+    2. `find_package(Eigen3)` (module mode)
+    3. Vendored headers (`externals/Eigen`)
+
+If package discovery fails and submodules are not present, the configure step stops with an explicit error.
+
 ## Usage
 
 The Python class `Basis1D` provides the following features:
 * Evaluation of Chebyshev polynomials of the first kind and their derivatives
 * Chebyshev points of the first and second kinds
 * Differentiation matrix
-* Matrix for Dirichlet recombination
+* Basis recombinations for Dirichlet and Neumann boundary conditions
 
 The Python classes `RealFunction` and `ComplexFunction` provide representations of univariate functions as Chebyshev series.
-THey provide the following features:
+They provide the following features:
 * Construction of the Chebyshev representation based on a Python function
 * Evaluation of the function and its derivatives
 * Addition, subtraction and multiplication
