@@ -5,7 +5,7 @@ This package provides:
 * Functions represented as Chebyshev series
 
 It is intended to be used for the resolution of differential equations using spectral methods.
-It is primarily a C++ library with a Python wrapper using [pybind11](https://pybind11.readthedocs.io/en/stable/).
+It is primarily a C++ library with a Python wrapper using [nanobind](https://nanobind.readthedocs.io/en/latest/).
 It also relies on [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) for linear algebra.
 
 ## Installation
@@ -30,16 +30,13 @@ This will require a C++ compiler and `cmake`.
 
 When building from source with CMake, dependencies are resolved in this order:
 
-- `pybind11`:
-    1. `find_package(pybind11 CONFIG)`
-    2. Python-provided CMake package path (`python -m pybind11 --cmakedir`)
-    3. Vendored submodule (`externals/pybind11`)
+- `nanobind`: installed as a Python build dependency (via `pip`/`conda`), located through its CMake package path (`python -m nanobind --cmake_dir`).
 - `Eigen3`:
     1. `find_package(Eigen3 CONFIG)`
     2. `find_package(Eigen3)` (module mode)
     3. Vendored headers (`externals/Eigen`)
 
-If package discovery fails and submodules are not present, the configure step stops with an explicit error.
+If Eigen3 discovery fails and the submodule is not present, the configure step stops with an explicit error.
 
 ## Usage
 

@@ -10,12 +10,6 @@ graft externals/Eigen/unsupported/Eigen
 include externals/Eigen/COPYING.*
 include externals/Eigen/COPYING.README
 
-graft externals/pybind11/include
-graft externals/pybind11/tools
-graft externals/pybind11/pybind11
-include externals/pybind11/CMakeLists.txt
-include externals/pybind11/LICENSE
-include externals/pybind11/pyproject.toml
 graft tests
 
 global-exclude *.py[cod] __pycache__/*
@@ -47,7 +41,3 @@ prune externals/Eigen/test
 prune externals/Eigen/unsupported/bench
 prune externals/Eigen/unsupported/doc
 prune externals/Eigen/unsupported/test
-
-prune externals/pybind11/.github
-prune externals/pybind11/docs
-prune externals/pybind11/tests

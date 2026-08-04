@@ -26,37 +26,26 @@ if (NOT Eigen3_FOUND)
     endif()
 endif()
 
-find_package(pybind11 CONFIG QUIET)
+find_package(Python COMPONENTS Interpreter Development REQUIRED)
 
-if (NOT pybind11_FOUND)
-    if (NOT DEFINED PYTHON_EXECUTABLE)
-        find_package(Python3 COMPONENTS Interpreter REQUIRED)
-        set(PYTHON_EXECUTABLE "${Python3_EXECUTABLE}")
-    endif()
-
-    execute_process(
-        COMMAND "${PYTHON_EXECUTABLE}" -m pybind11 --cmakedir
-        OUTPUT_VARIABLE pybind11_DIR
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-        ERROR_QUIET
-    )
-
-    if (pybind11_DIR)
-        list(APPEND CMAKE_PREFIX_PATH "${pybind11_DIR}")
-        find_package(pybind11 CONFIG QUIET)
-    endif()
+if (NOT DEFINED PYTHON_EXECUTABLE)
+    set(PYTHON_EXECUTABLE "${Python_EXECUTABLE}")
 endif()
 
-if (NOT pybind11_FOUND)
-    if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/externals/pybind11/CMakeLists.txt")
-        add_subdirectory("externals/pybind11")
-    else()
-        message(FATAL_ERROR "pybind11 was not found via CMake package discovery and vendored fallback is unavailable. Install pybind11 (pip/conda/system) or initialize submodules.")
-    endif()
+execute_process(
+    COMMAND "${PYTHON_EXECUTABLE}" -m nanobind --cmake_dir
+    OUTPUT_VARIABLE nanobind_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_QUIET
+)
+
+if (nanobind_DIR)
+    list(APPEND CMAKE_PREFIX_PATH "${nanobind_DIR}")
 endif()
 
-pybind11_add_module(cheby "${CMAKE_CURRENT_SOURCE_DIR}/src/pybind11_wrapper.cpp")
-target_compile_definitions(cheby PUBLIC PYBIND11)
+find_package(nanobind CONFIG REQUIRED)
+
+nanobind_add_module(cheby "${CMAKE_CURRENT_SOURCE_DIR}/src/nanobind_wrapper.cpp")
 target_include_directories(cheby PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 if (CHEBY_USE_VENDORED_EIGEN)
