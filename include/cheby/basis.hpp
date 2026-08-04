@@ -45,7 +45,7 @@ class Basis {
     /// @param end The end of the interval.
     Basis(const Index degree, const Parameter start = -1.0,
           const Parameter end = +1.0)
-        : order(degree), xmin(start), xmax(end){};
+        : order(degree), xmin(start), xmax(end) {};
 
     /// @brief Get the Chebyshev points of the first type.
     /// @param num_points The number of points to generate.
@@ -150,7 +150,7 @@ class Basis {
     const ValueMatrix ProjectionMatrix() const {
         const Index N = order + 1;
         ValueMatrix matrix = ValueMatrix::Zero(N, N);
-        const Value jacobian = xmax - xmin;
+        const Value jacobian = (xmax - xmin) / 2.0;
         Index q = 0;
         for (Index m = 0; m < N; ++m) {
             for (Index n = q; n <= m; n += 2) {
