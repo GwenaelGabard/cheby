@@ -1,8 +1,8 @@
 import numpy as np
-import sympy as sp
 import pytest
-from cases import sub_vec, complex_case_list, real_case_list, x, fun_from_expr
-from cheby import RealFunction, ComplexFunction
+import sympy as sp
+from cases import complex_case_list, fun_from_expr, real_case_list, sub_vec, x
+from cheby import ComplexFunction, RealFunction
 
 rel_tol = 1.0e-12
 abs_tol = 1.0e-12

@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
-from cases import real_case_list, complex_case_list, x, fun_from_expr
-from cheby import RealFunction, ComplexFunction
+from cases import complex_case_list, fun_from_expr, real_case_list, x
+from cheby import ComplexFunction, RealFunction
 
 rel_tol = 1.0e-13
 abs_tol = 1.0e-13
