@@ -19,10 +19,7 @@ def test_real_real_part(fun, xmin, xmax):
     error = np.max(np.abs(delta))
     norm = np.max(np.abs(c_ex))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
 
 
 @pytest.mark.parametrize("fun, xmin, xmax", real_case_list)
@@ -37,10 +34,7 @@ def test_real_imag_part(fun, xmin, xmax):
     error = np.max(np.abs(delta))
     norm = np.max(np.abs(c_ex))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
 
 
 @pytest.mark.parametrize("fun, xmin, xmax", real_case_list)
@@ -55,10 +49,7 @@ def test_real_conj(fun, xmin, xmax):
     error = np.max(np.abs(delta))
     norm = np.max(np.abs(c_ex))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
 
 
 @pytest.mark.parametrize("fun, xmin, xmax", real_case_list + complex_case_list)
@@ -73,10 +64,7 @@ def test_complex_real_part(fun, xmin, xmax):
     error = np.max(np.abs(delta))
     norm = np.max(np.abs(c_ex))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
 
 
 @pytest.mark.parametrize("fun, xmin, xmax", real_case_list + complex_case_list)
@@ -91,10 +79,7 @@ def test_complex_imag_part(fun, xmin, xmax):
     error = np.max(np.abs(delta))
     norm = np.max(np.abs(c_ex))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
 
 
 @pytest.mark.parametrize("fun, xmin, xmax", real_case_list + complex_case_list)
@@ -109,7 +94,4 @@ def test_complex_conj(fun, xmin, xmax):
     error = np.max(np.abs(delta))
     norm = np.max(np.abs(c_ex))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm

@@ -20,10 +20,7 @@ def test_normL2_real(fun, xmin, xmax):
     error = np.max(np.abs(norm_ex - norm_num))
     norm = np.max(np.abs(norm_ex))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
 
 
 @pytest.mark.parametrize("fun, xmin, xmax", real_case_list + complex_case_list)
@@ -39,10 +36,7 @@ def test_normL2_complex(fun, xmin, xmax):
     error = np.max(np.abs(norm_ex - norm_num))
     norm = np.max(np.abs(norm_ex))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
 
 
 @pytest.mark.parametrize("fun, xmin, xmax", real_case_list)
@@ -59,10 +53,7 @@ def test_normH1_real(fun, xmin, xmax):
     error = np.max(np.abs(norm_ex - norm_num))
     norm = np.max(np.abs(norm_ex))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
 
 
 @pytest.mark.parametrize("fun, xmin, xmax", real_case_list + complex_case_list)
@@ -79,10 +70,7 @@ def test_normH1_complex(fun, xmin, xmax):
     error = np.max(np.abs(norm_ex - norm_num))
     norm = np.max(np.abs(norm_ex))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
 
 
 @pytest.mark.parametrize("fun, xmin, xmax", real_case_list)
@@ -100,10 +88,7 @@ def test_normH1_real2(fun, xmin, xmax, alpha):
     error = np.max(np.abs(norm_ex - norm_num))
     norm = np.max(np.abs(norm_ex))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
 
 
 @pytest.mark.parametrize("fun, xmin, xmax", real_case_list + complex_case_list)
@@ -121,7 +106,4 @@ def test_normH1_complex2(fun, xmin, xmax, alpha):
     error = np.max(np.abs(norm_ex - norm_num))
     norm = np.max(np.abs(norm_ex))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm

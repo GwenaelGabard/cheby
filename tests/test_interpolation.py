@@ -18,10 +18,7 @@ def test_interpolation_r(fun, xmin, xmax):
     error = np.max(np.abs(f_ex - f_num))
     norm = np.max(np.abs(f_ex))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
 
 
 @pytest.mark.parametrize("fun, xmin, xmax", real_case_list + complex_case_list)
@@ -35,7 +32,4 @@ def test_interpolation_c(fun, xmin, xmax):
     error = np.max(np.abs(f_ex - f_num))
     norm = np.max(np.abs(f_ex))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm

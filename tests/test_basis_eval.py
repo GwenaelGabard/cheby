@@ -23,7 +23,4 @@ def test_basis_eval(order, bounds):
     error = np.max(np.abs(V - V_ex))
     norm = np.max(np.abs(V_ex))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm

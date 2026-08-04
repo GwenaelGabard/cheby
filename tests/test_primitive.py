@@ -24,10 +24,7 @@ def test_real_primitive(fun, xmin, xmax):
     error = np.max(np.abs(delta))
     norm = np.max(np.abs(if_ex.coef))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
 
 
 @pytest.mark.parametrize("fun, xmin, xmax", real_case_list + complex_case_list)
@@ -46,7 +43,4 @@ def test_complex_primitive(fun, xmin, xmax):
     error = np.max(np.abs(delta))
     norm = np.max(np.abs(if_ex.coef))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm

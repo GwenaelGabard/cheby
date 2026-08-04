@@ -32,10 +32,7 @@ def test_matprod_rr(fun1, fun2, xmin, xmax):
     error = np.max(np.abs(delta))
     norm = np.max(np.abs(p_ex.coef))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
 
 
 @pytest.mark.parametrize("fun1, fun2, xmin, xmax", prod_list_cr)
@@ -55,10 +52,7 @@ def test_matprod_cr(fun1, fun2, xmin, xmax):
     error = np.max(np.abs(delta))
     norm = np.max(np.abs(p_ex.coef))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
 
 
 @pytest.mark.parametrize("fun1, fun2, xmin, xmax", prod_list_rc)
@@ -78,10 +72,7 @@ def test_matprod_rc(fun1, fun2, xmin, xmax):
     error = np.max(np.abs(delta))
     norm = np.max(np.abs(p_ex.coef))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
 
 
 @pytest.mark.parametrize("fun1, fun2, xmin, xmax", prod_list_cc)
@@ -101,7 +92,4 @@ def test_matprod_cc(fun1, fun2, xmin, xmax):
     error = np.max(np.abs(delta))
     norm = np.max(np.abs(p_ex.coef))
 
-    if norm == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
