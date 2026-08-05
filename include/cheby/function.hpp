@@ -374,6 +374,10 @@ class Function {
     ValueMatrix ColleagueMatrix() const {
         const Index N = coef.size() - 1;
         ValueMatrix matrix = ValueMatrix::Zero(N, N);
+        if (N == 1) {
+            matrix(0, 0) = -coef(0) / coef(1);
+            return matrix;
+        }
         matrix(0, 1) = 1.0;
         for (Index n = 1; n < N - 1; ++n) {
             matrix(n, n - 1) = 0.5;
@@ -387,12 +391,14 @@ class Function {
     /// @brief Compute the roots of the function.
     /// @return A vector of roots of the function.
     ParamVector Roots() const {
-        auto values = BalanceMatrix(ColleagueMatrix()).eigenvalues();
+        const auto colleague = ColleagueMatrix();
+        auto values = BalanceMatrix(colleague).eigenvalues();
+        const double threshold = rel_tol * colleague.norm();
         ParamVector roots(values.size());
         Index j = 0;
         for (Index i = 0; i < values.size(); ++i) {
             const Parameter r = values(i).real();
-            if ((r >= -1.0) & (r <= 1.0) & (values(i).imag() == 0.0)) {
+            if ((r >= -1.0) & (r <= 1.0) & (abs(values(i).imag()) <= threshold)) {
                 roots(j) = (r + 1.0) / 2.0 * (xmax - xmin) + xmin;
                 j++;
             }
