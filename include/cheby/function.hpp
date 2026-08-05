@@ -112,7 +112,7 @@ class Function {
     /// @brief The type of the real part of a value.
     using RealPart = typename Eigen::NumTraits<Value>::Real;
     /// @brief The type of the Chebyshev basis.
-    using Basis = cheby::Basis<Value, Parameter, Index>;
+    using Basis = cheby::Basis<RealPart, Parameter, Index>;
 
     static constexpr double rel_tol = 1.e-14;
     static constexpr Index tail_length = 8;
