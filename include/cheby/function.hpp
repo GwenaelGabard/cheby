@@ -126,7 +126,7 @@ class Function {
     Parameter xmax;
 
     /// @brief Default constructor for a function.
-    Function() : xmin(-1.0), xmax(+1.0), coef(){};
+    Function() : xmin(-1.0), xmax(+1.0), coef() {};
 
     /// @brief Construct a Chebyshev representation of a function from a start,
     /// an end, and a vector of coefficients.
@@ -134,7 +134,7 @@ class Function {
     /// @param end The end of the interval.
     /// @param c The vector of coefficients.
     Function(const Parameter start, const Parameter end, const CoefVector &c)
-        : xmin(start), xmax(end), coef(c){};
+        : xmin(start), xmax(end), coef(c) {};
 
     /// @brief Construct a Chebyshev representation of function from a start, an
     /// end, and the function.
@@ -448,6 +448,65 @@ class Function {
             }
         }
         return (Function(xmin, xmax, fn));
+    }
+
+    /// @brief Compute the inverse of the function.
+    /// @param N The number of coefficients of the inverse function.
+    /// @return The inverse of the function.
+    Function Inverse(const Index N) const {
+        // Get the min and max of the function on the interval
+        // assuming it is monotonically increasing
+        ParamVector x(2);
+        x[0] = xmin;
+        x[1] = xmax;
+        const auto fab = Eval(x);
+        const Value fa = fab[0];
+        const Value fb = fab[1];
+        // Build all the powers of the function
+        const Index k = Index(log2(N)) + 1;
+        std::vector<CoefVector> f(k);
+        f[0] = coef;
+        f[0](0) -= (fa + fb) / 2.0;
+        f[0] *= 2.0 / (fb - fa);
+        for (Index i = 1; i < k; ++i) f[i] = MultiplyCoef(f[i - 1], f[i - 1]);
+        std::vector<CoefVector> g(N + 1);
+        g[0] = CoefVector(1);
+        g[0](0) = 1.0;
+        g[1] = f[0];
+        g[2] = f[1];
+        for (Index n = 3; n <= N; ++n) {
+            const Index e = Index(log2(n)) + 1;
+            Index p = 1 << (e - 1);
+            Index m = n - p;
+            CoefVector fn = f[e - 1];
+            for (int i = e - 2; i >= 0; --i) {
+                p >>= 1;
+                if (m >= p) {
+                    fn = MultiplyCoef(fn, f[i]);
+                    m -= p;
+                }
+            }
+            g[n] = fn;
+        }
+        // Get the max length of the coef vectors
+        Index max_length = 0;
+        for (Index i = 0; i <= N; ++i)
+            if (g[i].size() > max_length) max_length = g[i].size();
+        // Build the matrix with the coefficients of the powers
+        ValueMatrix matrix = ValueMatrix::Zero(max_length, N + 1);
+        for (Index n = 0; n <= N; ++n)
+            matrix(Eigen::seq(0, g[n].size() - 1), n) = g[n];
+        // Get the monomial matrix of the basis
+        ValueMatrix monomials = Basis(N, -1, +1).MonomialMatrix();
+        // Form and solve the linear least-square problem
+        ValueMatrix K = matrix * monomials;
+        ValueMatrix s = ValueVector::Zero(max_length, 1);
+        s(1, 0) = 1.0;
+        ValueMatrix c = K.completeOrthogonalDecomposition().solve(s);
+        // Rescale the inverse function to correspond to the original interval
+        c *= (xmax - xmin) / 2.0;
+        c(0) += (xmin + xmax) / 2.0;
+        return (Function(fa, fb, c.real()));
     }
 
     /// @brief Compute the coefficients of the corresponding polynomials.
