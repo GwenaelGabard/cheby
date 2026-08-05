@@ -187,18 +187,18 @@ class Basis {
 
     /// @brief Provide the matrix for the Neumann basis recombination.
     /// The recombined basis has zero derivatives at the end points, except for
-    /// the second and third basis functions. The second function has derivative
-    /// 1 and 0 at the start and end points, respectively. The third function has
-    /// derivative 0 and 1 at the start and end points, respectively.
+    /// the first and second basis functions. The first function has derivative
+    /// 1 and 0 at the start and end points, respectively. The second function
+    /// has derivative 0 and 1 at the start and end points, respectively.
     /// @return The square recombination matrix.
     const ValueMatrix NeumannMatrix() const {
         const Index N = order + 1;
         ValueMatrix matrix = ValueMatrix::Zero(N, N);
-        matrix(0, 0) = 1.0;
+        matrix(1, 0) = 0.5;
+        matrix(2, 0) = -0.125;
         matrix(1, 1) = 0.5;
-        matrix(2, 1) = -0.125;
-        matrix(1, 2) = 0.5;
-        matrix(2, 2) = 0.125;
+        matrix(2, 1) = 0.125;
+        matrix(0, 2) = 1.0;
         for (Index i = 3; i < N; ++i) {
             matrix(i, i) = 1.0 / (static_cast<Value>(i) * static_cast<Value>(i));
             if (i % 2 == 0) {
