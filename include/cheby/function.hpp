@@ -92,8 +92,7 @@ outT Multiply(const T1 &f1, const T2 &f2) {
 /// @tparam valueT The type of the values of the function.
 /// @tparam parameterT The type of the parameter of the function.
 /// @tparam indexT The type of the indices of the coefficients.
-template <typename valueT, typename parameterT = double,
-          typename indexT = std::size_t>
+template <typename valueT, typename parameterT = double, typename indexT = std::size_t>
 class Function {
    public:
     /// @brief The type of the values of the function.
@@ -141,8 +140,8 @@ class Function {
     /// @param f The function to represent.
     /// @param start The start of the interval.
     /// @param end The end of the interval.
-    Function(std::function<ValueVector(ParamVector)> f, const Parameter start,
-             const Parameter end, const int N = -1) {
+    Function(std::function<ValueVector(ParamVector)> f, const Parameter start, const Parameter end,
+             const int N = -1) {
         xmin = start;
         xmax = end;
         if (N > 0) {
@@ -150,7 +149,8 @@ class Function {
         } else {
             for (int k = 4; k <= 13; ++k) {
                 ComputeCoef(f, xmin, xmax, pow(2, k));
-                if (TailLength() >= tail_length) break;
+                if (TailLength() >= tail_length)
+                    break;
             }
             Trim();
         }
@@ -162,12 +162,13 @@ class Function {
     /// @param xmin The start of the interval.
     /// @param xmax The end of the interval.
     /// @param N The number of coefficients to calculate.
-    void ComputeCoef(std::function<ValueVector(ParamVector)> f,
-                     const Parameter xmin, const Parameter xmax, const int N) {
+    void ComputeCoef(std::function<ValueVector(ParamVector)> f, const Parameter xmin,
+                     const Parameter xmax, const int N) {
         auto xi = ParamVector::LinSpaced(N + 1, 0.0, EIGEN_PI).cos();
         Eigen::Matrix<Value, Eigen::Dynamic, 1> fn(2 * N);
         fn.head(N + 1) = f(xmin + (xmax - xmin) * (1.0 + xi) / 2.0);
-        for (int n = 1; n < N; ++n) fn(2 * N - n) = fn(n);
+        for (int n = 1; n < N; ++n)
+            fn(2 * N - n) = fn(n);
         Eigen::FFT<double> fft;
         Eigen::VectorXcd fourier(2 * N);
         fft.fwd(fourier, fn);
@@ -191,24 +192,31 @@ class Function {
     /// @return The number of coefficients to trim from the end of the
     /// coefficient vector.
     Index TailLength() const {
-        if (coef.size() == 0) return (0);
+        if (coef.size() == 0)
+            return (0);
         Index n = coef.size() - 1;
         const double threshold = coef.abs().maxCoeff() * rel_tol;
-        while ((abs(coef(n)) <= threshold) & (n > 0)) n--;
+        while ((abs(coef(n)) <= threshold) & (n > 0))
+            n--;
         return (coef.size() - n - 1);
     }
 
     /// @brief Trim the coefficient vector.
-    void Trim() { coef.conservativeResize(coef.size() - TailLength()); }
+    void Trim() {
+        coef.conservativeResize(coef.size() - TailLength());
+    }
 
     /// @brief Evaluate the function at a number of points.
     /// @param x The points at which to evaluate the function.
     /// @return The values of the function at the given points.
     ValueVector Eval(const ParamVector &x) const {
-        if (coef.size() == 0) return (ValueVector::Zero(x.size()));
-        if (coef.size() == 1) return (ValueVector::Constant(x.size(), coef(0)));
+        if (coef.size() == 0)
+            return (ValueVector::Zero(x.size()));
+        if (coef.size() == 1)
+            return (ValueVector::Constant(x.size(), coef(0)));
         const ParamVector xi = (x - xmin) / (xmax - xmin) * 2.0 - 1.0;
-        if (coef.size() == 2) return (coef(0) + coef(1) * xi);
+        if (coef.size() == 2)
+            return (coef(0) + coef(1) * xi);
         const auto N = coef.size() - 1;
         ValueVector fk, a(x.size()), b(x.size());
         a.fill(coef(N));
@@ -227,7 +235,8 @@ class Function {
     /// @param x The points at which to evaluate the derivative of the function.
     /// @return The values of the derivative of the function at the given points.
     Function Derivative() const {
-        if (coef.size() < 2) return (Function(xmin, xmax, CoefVector()));
+        if (coef.size() < 2)
+            return (Function(xmin, xmax, CoefVector()));
         const Index N = coef.size() - 1;
         CoefVector g = CoefVector::Zero(N + 2);
         const Parameter constant = 4.0 / (xmax - xmin);
@@ -245,7 +254,8 @@ class Function {
     /// @brief Compute the primitive (anti-derivative) of the function.
     /// @return The primitive of the function.
     Function Primitive() const {
-        if (coef.size() == 0) return (Function(xmin, xmax, CoefVector()));
+        if (coef.size() == 0)
+            return (Function(xmin, xmax, CoefVector()));
         if (coef.size() == 1) {
             CoefVector g(2);
             g(0) = 0.0;
@@ -272,8 +282,10 @@ class Function {
     /// @brief Compute the integral of the function over the whole interval.
     /// @return The integral of the function over the whole interval.
     Value Integral() const {
-        if (coef.size() == 0) return (0.0);
-        if (coef.size() == 1) return (coef(0) * (xmax - xmin));
+        if (coef.size() == 0)
+            return (0.0);
+        if (coef.size() == 1)
+            return (coef(0) * (xmax - xmin));
         const Index N = coef.size() - 1;
         Value nn = 2.0;
         Value integral = coef(0);
@@ -330,7 +342,8 @@ class Function {
         ValueMatrix matrix = ValueMatrix::Zero(num_rows, num_cols);
         for (int n = 0; n < num_cols; ++n) {
             for (int m = 0; m < num_coefs; ++m) {
-                if (m + n < num_rows) matrix(m + n, n) += coef(m) / 2.0;
+                if (m + n < num_rows)
+                    matrix(m + n, n) += coef(m) / 2.0;
                 if (abs(m - n) < num_rows)
                     matrix(abs(m - n), n) += coef(m) / 2.0;
             }
@@ -341,8 +354,7 @@ class Function {
     /// @brief Compute the L2 norm of the function.
     /// @return The L2 norm of the function.
     RealPart NormL2() const {
-        const auto product =
-            Multiply<Function, Function, Function>(*this, Conjugate());
+        const auto product = Multiply<Function, Function, Function>(*this, Conjugate());
         return (sqrt(product.Real().Integral()));
     }
 
@@ -389,7 +401,9 @@ class Function {
 
     /// @brief Compute the extrema of the function.
     /// @return A vector of extrema of the function.
-    ParamVector Extrema() const { return (Derivative().Roots()); }
+    ParamVector Extrema() const {
+        return (Derivative().Roots());
+    }
 
     /// @brief Multiply two coefficient vectors.
     /// @param c1 The first coefficient vector.
@@ -414,7 +428,8 @@ class Function {
         if (c.size() > 0) {
             Index n = c.size() - 1;
             const double threshold = c.abs().maxCoeff() * tol;
-            while ((abs(c(n)) <= threshold) & (n > 0)) n--;
+            while ((abs(c(n)) <= threshold) & (n > 0))
+                n--;
             c.conservativeResize(n + 1);
         }
         return (c);
@@ -429,14 +444,17 @@ class Function {
             g(0) = 1.0;
             return (Function(xmin, xmax, g));
         }
-        if (n == 1) return (*this);
+        if (n == 1)
+            return (*this);
         auto c2 = MultiplyCoef(coef, coef);
-        if (n == 2) return (Function(xmin, xmax, c2));
+        if (n == 2)
+            return (Function(xmin, xmax, c2));
         const Index k = Index(log2(n)) + 1;
         std::vector<CoefVector> f(k);
         f[0] = coef;
         f[1] = c2;
-        for (Index i = 2; i < k; ++i) f[i] = MultiplyCoef(f[i - 1], f[i - 1]);
+        for (Index i = 2; i < k; ++i)
+            f[i] = MultiplyCoef(f[i - 1], f[i - 1]);
         Index p = 1 << (k - 1);
         Index m = n - p;
         CoefVector fn = f[k - 1];
@@ -468,7 +486,8 @@ class Function {
         f[0] = coef;
         f[0](0) -= (fa + fb) / 2.0;
         f[0] *= 2.0 / (fb - fa);
-        for (Index i = 1; i < k; ++i) f[i] = MultiplyCoef(f[i - 1], f[i - 1]);
+        for (Index i = 1; i < k; ++i)
+            f[i] = MultiplyCoef(f[i - 1], f[i - 1]);
         std::vector<CoefVector> g(N + 1);
         g[0] = CoefVector(1);
         g[0](0) = 1.0;
@@ -491,7 +510,8 @@ class Function {
         // Get the max length of the coef vectors
         Index max_length = 0;
         for (Index i = 0; i <= N; ++i)
-            if (g[i].size() > max_length) max_length = g[i].size();
+            if (g[i].size() > max_length)
+                max_length = g[i].size();
         // Build the matrix with the coefficients of the powers
         ValueMatrix matrix = ValueMatrix::Zero(max_length, N + 1);
         for (Index n = 0; n <= N; ++n)
@@ -537,10 +557,8 @@ class Function {
 /// @param xmax The end of the interval.
 /// @param c The constant value of the function.
 /// @return The constant function.
-template <typename valueT, typename parameterT = double,
-          typename indexT = std::size_t>
-Function<valueT, parameterT, indexT> Constant(const parameterT xmin,
-                                              const parameterT xmax,
+template <typename valueT, typename parameterT = double, typename indexT = std::size_t>
+Function<valueT, parameterT, indexT> Constant(const parameterT xmin, const parameterT xmax,
                                               const valueT c) {
     typename Function<valueT, parameterT, indexT>::CoefVector coef(1);
     coef(0) = c;

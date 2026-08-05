@@ -12,8 +12,7 @@ namespace cheby {
 /// @tparam valueT The type of the values of the basis functions.
 /// @tparam parameterT The type of the parameter of the basis functions.
 /// @tparam indexT The type of the indices of the basis functions.
-template <typename valueT, typename parameterT = double,
-          typename indexT = std::size_t>
+template <typename valueT, typename parameterT = double, typename indexT = std::size_t>
 class Basis {
    public:
     /// @brief The type of the values of the basis.
@@ -43,16 +42,17 @@ class Basis {
     /// @param degree The order of the basis.
     /// @param start The start of the interval.
     /// @param end The end of the interval.
-    Basis(const Index degree, const Parameter start = -1.0,
-          const Parameter end = +1.0)
+    Basis(const Index degree, const Parameter start = -1.0, const Parameter end = +1.0)
         : order(degree), xmin(start), xmax(end) {};
 
     /// @brief Get the Chebyshev points of the first type.
     /// @param num_points The number of points to generate.
     /// @return A vector with the coordinates of the points.
     const ParamVector Points1(int num_points = -1) const {
-        if (num_points == 0) return ParamVector(0);
-        if (num_points < 0) num_points = order + 1;
+        if (num_points == 0)
+            return ParamVector(0);
+        if (num_points < 0)
+            num_points = order + 1;
         ParamVector points(num_points);
         const Parameter a = EIGEN_PI / num_points;
         const Parameter b = EIGEN_PI / (2.0 * num_points);
@@ -67,8 +67,10 @@ class Basis {
     /// @param num_points The number of points to generate.
     /// @return A vector with the coordinates of the points.
     const ParamVector Points2(int num_points = -1) const {
-        if ((num_points == 0) || (num_points == 1)) return ParamVector(0);
-        if (num_points < 0) num_points = order + 1;
+        if ((num_points == 0) || (num_points == 1))
+            return ParamVector(0);
+        if (num_points < 0)
+            num_points = order + 1;
         ParamVector points(num_points);
         const Parameter a = EIGEN_PI / (num_points - 1);
         const Parameter b = (xmax + xmin) * 0.5;
@@ -89,9 +91,11 @@ class Basis {
         // Optimisation: store 2\xi instead of \xi
         const ParamVector xi = (x - xmin) * (4.0 / (xmax - xmin)) - 2.0;
         T.col(0) = 1.0;
-        if (N == 1) return T;
+        if (N == 1)
+            return T;
         T.col(1) = xi / 2.0;
-        if (N == 2) return T;
+        if (N == 2)
+            return T;
         for (Index n = 2; n < N; ++n)
             T.col(n) = xi * T.col(n - 1) - T.col(n - 2);
         return T;
@@ -103,25 +107,28 @@ class Basis {
     /// @param D The maximum order of the derivatives to evaluate.
     /// @return A vector of matrices of polynomial derivatives at the given
     /// points (each row is a point, each column is a polynomial).
-    std::vector<ValueMatrix> Derivatives(const ParamVector x,
-                                         const Index D) const {
+    std::vector<ValueMatrix> Derivatives(const ParamVector x, const Index D) const {
         const Index N = order + 1;
         // Optimisation: store 2\xi instead of \xi
         const ParamVector xi = (x - xmin) * (4.0 / (xmax - xmin)) - 2.0;
         std::vector<ValueMatrix> T(D + 1);
-        for (auto &t : T) t = ValueMatrix::Zero(x.size(), N);
+        for (auto &t : T)
+            t = ValueMatrix::Zero(x.size(), N);
         T[0].col(0) = 1.0;
-        if (N == 1) return T;
+        if (N == 1)
+            return T;
         T[0].col(1) = xi / 2.0;
-        if (D > 0) T[1].col(1) = 1.0;
-        if (N == 2) return T;
+        if (D > 0)
+            T[1].col(1) = 1.0;
+        if (N == 2)
+            return T;
         for (Index n = 2; n < N; ++n) {
             T[0].col(n) = xi * T[0].col(n - 1) - T[0].col(n - 2);
             for (Index d = 1; d <= D; ++d)
-                T[d].col(n) = xi * T[d].col(n - 1) +
-                              2 * d * T[d - 1].col(n - 1) - T[d].col(n - 2);
+                T[d].col(n) = xi * T[d].col(n - 1) + 2 * d * T[d - 1].col(n - 1) - T[d].col(n - 2);
         }
-        for (Index d = 1; d <= D; ++d) T[d] *= std::pow(2.0 / (xmax - xmin), d);
+        for (Index d = 1; d <= D; ++d)
+            T[d] *= std::pow(2.0 / (xmax - xmin), d);
         return T;
     };
 
@@ -131,10 +138,12 @@ class Basis {
     const ValueMatrix DiffMatrix() const {
         const Index N = order + 1;
         ValueMatrix D = ValueMatrix::Zero(N, N);
-        if (N == 1) return D;
+        if (N == 1)
+            return D;
         const Value jacobian = 4.0 / (xmax - xmin);
         D(0, 1) = jacobian * 0.5;
-        if (N == 2) return (D);
+        if (N == 2)
+            return (D);
         D(1, 2) = jacobian * 2.0;
         for (Index n = 3; n < N; ++n) {
             const Value nn = static_cast<Value>(n);
@@ -156,8 +165,7 @@ class Basis {
             for (Index n = q; n <= m; n += 2) {
                 const Value sum = m + n;
                 const Value dif = m - n;
-                matrix(m, n) =
-                    jacobian / (1.0 - sum * sum) + jacobian / (1.0 - dif * dif);
+                matrix(m, n) = jacobian / (1.0 - sum * sum) + jacobian / (1.0 - dif * dif);
                 matrix(n, m) = matrix(m, n);
             }
             q = 1 - q;
@@ -220,8 +228,7 @@ class Basis {
         matrix(0, 0) = 1.0;
         matrix(1, 1) = 1.0;
         for (Index i = 2; i < N; ++i) {
-            matrix(Eigen::seq(1, N - 1), i) +=
-                2.0 * matrix(Eigen::seq(0, N - 2), i - 1);
+            matrix(Eigen::seq(1, N - 1), i) += 2.0 * matrix(Eigen::seq(0, N - 2), i - 1);
             matrix.col(i) -= matrix.col(i - 2);
         }
         return matrix;
