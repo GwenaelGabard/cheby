@@ -1,5 +1,3 @@
-from itertools import product
-
 import numpy as np
 import pytest
 from cases import bound_list
@@ -12,9 +10,9 @@ order_list = [2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 25, 34, 123]
 degree_list = [1, 2, 3, 4, 5]
 
 
-@pytest.mark.parametrize(
-    "order, bounds, degree", product(order_list, bound_list, degree_list)
-)
+@pytest.mark.parametrize("degree", degree_list)
+@pytest.mark.parametrize("bounds", bound_list)
+@pytest.mark.parametrize("order", order_list)
 def test_basis_derivative(order, bounds, degree):
     basis = Basis1D(order, bounds[0], bounds[1])
     xi = np.linspace(-1, 1, 56)

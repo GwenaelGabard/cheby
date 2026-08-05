@@ -1,5 +1,3 @@
-from itertools import product
-
 import numpy as np
 import pytest
 from cheby import Basis1D
@@ -12,7 +10,8 @@ order_list = [2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 25, 34, 123]
 range_list = [(-1.0, 1.0), (0.0, 1.0), (-1.0, 0.0), (-3, -0.2), (-0.6, 2.1)]
 
 
-@pytest.mark.parametrize("order, bounds", product(order_list, range_list))
+@pytest.mark.parametrize("bounds", range_list)
+@pytest.mark.parametrize("order", order_list)
 def test_basis_eval(order, bounds):
     basis = Basis1D(order, bounds[0], bounds[1])
     xi = np.linspace(-1, 1, 56)

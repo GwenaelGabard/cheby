@@ -1,5 +1,3 @@
-from itertools import product
-
 import numpy as np
 import pytest
 from cheby import Basis1D
@@ -12,25 +10,26 @@ num_list = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 range_list = [(-1.0, 1.0), (0.0, 1.0), (-1.0, 0.0), (-3, -0.2), (-0.6, 2.1)]
 
 
-@pytest.mark.parametrize("order, range", product(order_list, range_list))
+@pytest.mark.parametrize("range", range_list)
+@pytest.mark.parametrize("order", order_list)
 def test_nolength(order, range):
     basis = Basis1D(order, range[0], range[1])
     p = basis.points1()
     assert len(p) == order + 1
 
 
-@pytest.mark.parametrize(
-    "order, range, num_points", product(order_list, range_list, num_list)
-)
+@pytest.mark.parametrize("num_points", num_list)
+@pytest.mark.parametrize("range", range_list)
+@pytest.mark.parametrize("order", order_list)
 def test_length(order, range, num_points):
     basis = Basis1D(order, range[0], range[1])
     p = basis.points1(num_points)
     assert len(p) == num_points
 
 
-@pytest.mark.parametrize(
-    "order, range, num_points", product(order_list, range_list, num_list)
-)
+@pytest.mark.parametrize("num_points", num_list)
+@pytest.mark.parametrize("range", range_list)
+@pytest.mark.parametrize("order", order_list)
 def test_value(order, range, num_points):
     basis = Basis1D(order, range[0], range[1])
     p = basis.points1(num_points)
