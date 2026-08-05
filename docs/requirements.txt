@@ -1,0 +1,6 @@
+jupyter-book<2
+matplotlib
+numpy
+sphinx-inline-tabs
+sphinx-proof
+sphinxcontrib-bibtex

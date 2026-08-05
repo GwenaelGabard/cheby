@@ -1,0 +1,67 @@
+# Book settings
+# Learn more at https://jupyterbook.org/customize/config.html
+# Comprehensive example: https://github.com/executablebooks/jupyter-book/blob/master/docs/_config.yml
+
+title: Cheby
+author: Gwenael Gabard
+
+# Re-execute notebooks only when they change.
+# See https://jupyterbook.org/content/execute.html
+execute:
+  execute_notebooks: cache
+
+# Define the name of the latex output file for PDF builds
+latex:
+  latex_documents:
+    targetname: book.tex
+
+# Add a bibtex file so that we can create citations
+bibtex_bibfiles:
+  - references.bib
+
+# Information about where the book exists on the web
+repository:
+  url: https://github.com/GwenaelGabard/cheby  # Online location of your book
+  path_to_book: docs  # Optional path to your book, relative to the repository root
+  branch: main  # Which branch of the repository should be used when creating links (optional)
+
+# Add GitHub buttons to your book
+# See https://jupyterbook.org/customize/config.html#add-a-link-to-your-repository
+html:
+  use_issues_button: true
+  use_repository_button: true
+
+sphinx:
+  config:
+    language: en
+    bibtex_reference_style: author_year
+    intersphinx_mapping:
+      python:
+        - "https://docs.python.org/3"
+        - null
+      numpy:
+        - "https://numpy.org/doc/stable/"
+        - null
+      matplotlib:
+        - "https://matplotlib.org/stable/"
+        - null
+    mathjax3_config:
+      tex:
+        macros:
+          "bnabla": "\\boldsymbol{\\nabla}"
+          "D": "\\mathrm{D}"
+          "dd": "\\mathrm{d}"
+          "ii": "\\mathrm{i}"
+          "ee": "\\mathrm{e}"
+          "p": "\\partial"
+          "scalar": "\\cdot"
+          "dscalar": ":"
+          "vec": ["\\boldsymbol{#1}", 1]
+          "mat": ["\\mathbf{#1}", 1]
+  extra_extensions:
+    - sphinx.ext.intersphinx
+    - sphinx.ext.autodoc
+    - sphinx.ext.napoleon
+    - sphinx.ext.autosummary
+    - sphinx_inline_tabs
+    - sphinx_proof

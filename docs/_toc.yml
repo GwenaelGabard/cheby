@@ -1,0 +1,30 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+parts:
+- caption: Basis
+  chapters:
+  - file: basis/introduction
+  - file: basis/points
+  - file: basis/derivative
+  - file: basis/integral
+  - file: basis/recombination
+- caption: Real and complex functions
+  chapters:
+  - file: function/introduction
+  - file: function/construction
+  - file: function/evaluation
+  - file: function/arithmetic
+  - file: function/derivative
+  - file: function/integral
+  - file: function/roots
+  - file: function/norms
+  - file: function/advanced
+- caption: API Reference
+  chapters:
+  - file: api/basis1d
+  - file: api/real_function
+  - file: api/complex_function
+  - file: api/functions
