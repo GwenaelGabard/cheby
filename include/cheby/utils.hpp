@@ -23,7 +23,7 @@ Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> BalanceMatrix(
                 r /= beta;
                 f *= beta;
             }
-            while (c >= r * beta) {
+            while ((c >= r * beta) && (r > 0.0)) {
                 c /= beta;
                 r *= beta;
                 f /= beta;
