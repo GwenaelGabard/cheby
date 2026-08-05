@@ -5,3 +5,5 @@ cheby_version.hpp
 __pycache__
 .pytest_cache
 .ruff_cache
+docs/_build
+.ipynb_checkpoints
