@@ -140,12 +140,14 @@ class Function {
     /// @param f The function to represent.
     /// @param start The start of the interval.
     /// @param end The end of the interval.
+    /// @param order The polynomial order. If negative, the number of coefficients is determined
+    /// automatically.
     Function(std::function<ValueVector(ParamVector)> f, const Parameter start, const Parameter end,
-             const int N = -1) {
+             const int order = -1) {
         xmin = start;
         xmax = end;
-        if (N > 0) {
-            ComputeCoef(f, xmin, xmax, N);
+        if (order > 0) {
+            ComputeCoef(f, xmin, xmax, order + 1);
         } else {
             for (int k = 4; k <= 13; ++k) {
                 ComputeCoef(f, xmin, xmax, pow(2, k));
