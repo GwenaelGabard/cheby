@@ -1,6 +1,7 @@
 #ifndef CHEBY_FUNCTION_H
 #define CHEBY_FUNCTION_H
 
+#include <algorithm>
 #include <unsupported/Eigen/FFT>
 
 #include "Eigen/Dense"
@@ -146,7 +147,7 @@ class Function {
              const int order = -1) {
         xmin = start;
         xmax = end;
-        if (order > 0) {
+        if (order >= 0) {
             ComputeCoef(f, xmin, xmax, order + 1);
         } else {
             for (int k = 4; k <= 13; ++k) {
@@ -163,21 +164,27 @@ class Function {
     /// @param f The function to represent.
     /// @param xmin The start of the interval.
     /// @param xmax The end of the interval.
-    /// @param N The number of coefficients to calculate.
+    /// @param num_coef The number of coefficients to calculate.
     void ComputeCoef(std::function<ValueVector(ParamVector)> f, const Parameter xmin,
-                     const Parameter xmax, const int N) {
-        auto xi = ParamVector::LinSpaced(N + 1, 0.0, EIGEN_PI).cos();
-        Eigen::Matrix<Value, Eigen::Dynamic, 1> fn(2 * N);
-        fn.head(N + 1) = f(xmin + (xmax - xmin) * (1.0 + xi) / 2.0);
-        for (int n = 1; n < N; ++n)
-            fn(2 * N - n) = fn(n);
+                     const Parameter xmax, const int num_coef) {
+        if (num_coef == 1) {
+            ParamVector xi = ParamVector::Zero(1);
+            coef = f(xmin + (xmax - xmin) * (1.0 + xi) / 2.0);
+            return;
+        }
+        const int n = num_coef - 1;
+        auto xi = ParamVector::LinSpaced(num_coef, 0.0, EIGEN_PI).cos();
+        Eigen::Matrix<Value, Eigen::Dynamic, 1> fn(2 * n);
+        fn.head(num_coef) = f(xmin + (xmax - xmin) * (1.0 + xi) / 2.0);
+        for (int k = 1; k < n; ++k)
+            fn(2 * n - k) = fn(k);
         Eigen::FFT<double> fft;
-        Eigen::VectorXcd fourier(2 * N);
+        Eigen::VectorXcd fourier(2 * n);
         fft.fwd(fourier, fn);
         if constexpr (std::is_same<Value, double>::value)
-            coef = fourier.head(N + 1).real() / N;
+            coef = fourier.head(num_coef).real() / n;
         else
-            coef = fourier.head(N + 1) / N;
+            coef = fourier.head(num_coef) / n;
         coef[0] /= 2;
         coef[coef.size() - 1] /= 2;
     }
