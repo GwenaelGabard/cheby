@@ -249,17 +249,24 @@ class Function {
     Function Derivative() const {
         if (coef.size() < 2)
             return (Function(xmin, xmax, CoefVector()));
-        const Index N = coef.size() - 1;
-        CoefVector g = CoefVector::Zero(N + 2);
+        const Index order = coef.size() - 1;
+        CoefVector g = CoefVector::Zero(order);
         const Parameter constant = 4.0 / (xmax - xmin);
-        double nn = N;
-        for (Index n = N; n > 1; --n) {
-            g(n - 1) = g(n + 1) + nn * coef(n) * constant;
+        double nn = order;
+        g(order - 1) = nn * coef(order) * constant;
+        if (order > 1) {
             nn -= 1.0;
+            g(order - 2) = nn * coef(order - 1) * constant;
+            if (order > 2) {
+                nn -= 1.0;
+                for (Index n = order - 2; n > 0; --n) {
+                    g(n - 1) = g(n + 1) + nn * coef(n) * constant;
+                    nn -= 1.0;
+                }
+            }
         }
-        g(0) = (coef(1) * constant + g(2)) * 0.5;
+        g(0) /= 2.0;
         Function d(xmin, xmax, g);
-        d.Trim();
         return (d);
     }
 
