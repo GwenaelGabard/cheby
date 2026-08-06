@@ -541,6 +541,10 @@ class Function {
     /// @return The coefficients of the corresponding polynomials.
     ValueVector Monomials() const {
         const Index N = coef.size();
+        if (N == 0)
+            return (ValueVector());
+        if (N == 1)
+            return (coef);
         ValueVector a = ValueVector::Zero(N);
         ValueVector b = ValueVector::Zero(N);
         ValueVector c = ValueVector::Zero(N);
