@@ -274,20 +274,21 @@ class Function {
             g(1) = coef(0) * (xmax - xmin) / 2.0;
             return (Function(xmin, xmax, g));
         }
-        const Index N = coef.size() - 1;
-        CoefVector g = CoefVector::Zero(N + 2);
-        double nn = 2.0;
-        for (Index n = 2; n <= N; ++n) {
-            g(n - 1) -= coef(n) / 2.0 / (nn - 1.0);
-            g(n + 1) += coef(n) / 2.0 / (nn + 1.0);
-            nn += 1.0;
+        const Index order = coef.size() - 1;
+        CoefVector g = CoefVector::Zero(order + 2);
+        g(1) = coef(0);
+        g(2) = coef(1) / 4.0;
+        double nm1 = 1.0;
+        double np1 = 3.0;
+        for (Index n = 2; n <= order; ++n) {
+            const auto temp = coef(n) / 2.0;
+            g(n - 1) -= temp / nm1;
+            g(n + 1) += temp / np1;
+            nm1 += 1.0;
+            np1 += 1.0;
         }
-        g(0) += coef(1);
-        g(1) += coef(0);
-        g(2) += coef(1) / 4.0;
         g *= (xmax - xmin) / 2.0;
         Function d(xmin, xmax, g);
-        d.Trim();
         return (d);
     }
 
