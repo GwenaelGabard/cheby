@@ -488,6 +488,11 @@ class Function {
         const auto fab = Eval(x);
         const Value fa = fab[0];
         const Value fb = fab[1];
+        if (N == 0) {
+            CoefVector c0(1);
+            c0(0) = (xmin + xmax) / 2.0;
+            return (Function(fa, fb, c0));
+        }
         // Build all the powers of the function
         const Index k = Index(log2(N)) + 1;
         std::vector<CoefVector> f(k);
@@ -500,7 +505,8 @@ class Function {
         g[0] = CoefVector(1);
         g[0](0) = 1.0;
         g[1] = f[0];
-        g[2] = f[1];
+        if (N >= 2)
+            g[2] = f[1];
         for (Index n = 3; n <= N; ++n) {
             const Index e = Index(log2(n)) + 1;
             Index p = 1 << (e - 1);
