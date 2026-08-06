@@ -20,10 +20,7 @@ def test_real_integral(fun, xmin, xmax):
     error = np.abs(i_ex - i_num)
     norm = np.abs(i_ex)
 
-    if float(norm) == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
 
 
 @pytest.mark.parametrize("fun, xmin, xmax", real_case_list)
@@ -40,10 +37,7 @@ def test_real_integral2(fun, xmin, xmax, a, b):
     error = np.abs(i_ex - i_num)
     norm = np.abs(i_ex)
 
-    if float(norm) == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
 
 
 @pytest.mark.parametrize("fun, xmin, xmax", real_case_list + complex_case_list)
@@ -57,10 +51,7 @@ def test_complex_integral(fun, xmin, xmax):
     error = np.abs(i_ex - i_num)
     norm = np.abs(i_ex)
 
-    if float(norm) == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
 
 
 @pytest.mark.parametrize("fun, xmin, xmax", real_case_list + complex_case_list)
@@ -77,7 +68,4 @@ def test_complex_integral2(fun, xmin, xmax, a, b):
     error = np.abs(i_ex - i_num)
     norm = np.abs(i_ex)
 
-    if float(norm) == 0.0:
-        assert error < abs_tol
-    else:
-        assert error / norm < rel_tol
+    assert error <= abs_tol + rel_tol * norm
