@@ -13,6 +13,10 @@ from cheby import ComplexFunction, RealFunction
 
 rel_tol = 5.0e-12
 abs_tol = 5.0e-12
+# For functions with large Chebyshev coefficients, round-off error in the product can be
+# much larger than the final result, so we adjust the tolerance by adding a term
+# proportional to the product of the two operands' coefficient magnitude.
+cond_tol = 100 * np.finfo(float).eps
 
 
 @pytest.mark.parametrize("fun1, fun2, xmin, xmax", prod_list_rr)
@@ -32,7 +36,8 @@ def test_matprod_rr(fun1, fun2, xmin, xmax):
     error = np.max(np.abs(delta))
     norm = np.max(np.abs(p_ex.coef))
 
-    assert error <= abs_tol + rel_tol * norm
+    scale = np.max(np.abs(f1.coef)) * np.max(np.abs(f2.coef))
+    assert error <= abs_tol + rel_tol * norm + cond_tol * scale
 
 
 @pytest.mark.parametrize("fun1, fun2, xmin, xmax", prod_list_cr)
@@ -52,7 +57,8 @@ def test_matprod_cr(fun1, fun2, xmin, xmax):
     error = np.max(np.abs(delta))
     norm = np.max(np.abs(p_ex.coef))
 
-    assert error <= abs_tol + rel_tol * norm
+    scale = np.max(np.abs(f1.coef)) * np.max(np.abs(f2.coef))
+    assert error <= abs_tol + rel_tol * norm + cond_tol * scale
 
 
 @pytest.mark.parametrize("fun1, fun2, xmin, xmax", prod_list_rc)
@@ -72,7 +78,8 @@ def test_matprod_rc(fun1, fun2, xmin, xmax):
     error = np.max(np.abs(delta))
     norm = np.max(np.abs(p_ex.coef))
 
-    assert error <= abs_tol + rel_tol * norm
+    scale = np.max(np.abs(f1.coef)) * np.max(np.abs(f2.coef))
+    assert error <= abs_tol + rel_tol * norm + cond_tol * scale
 
 
 @pytest.mark.parametrize("fun1, fun2, xmin, xmax", prod_list_cc)
@@ -92,4 +99,5 @@ def test_matprod_cc(fun1, fun2, xmin, xmax):
     error = np.max(np.abs(delta))
     norm = np.max(np.abs(p_ex.coef))
 
-    assert error <= abs_tol + rel_tol * norm
+    scale = np.max(np.abs(f1.coef)) * np.max(np.abs(f2.coef))
+    assert error <= abs_tol + rel_tol * norm + cond_tol * scale
