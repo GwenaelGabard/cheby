@@ -49,3 +49,9 @@ repos:
   hooks:
   - id: clang-format
     files: ^(src|include)/.*\.(h|hpp|c|cc|cpp)$
+
+- repo: https://github.com/kynan/nbstripout
+  rev: "0.9.1"
+  hooks:
+  - id: nbstripout
+    args: ["--keep-output", "--extra-keys", "metadata.language_info.version"]
