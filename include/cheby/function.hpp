@@ -7,6 +7,7 @@
 #include <unsupported/Eigen/FFT>
 
 #include "Eigen/Dense"
+#include "basis.hpp"
 #include "utils.hpp"
 
 namespace cheby {
