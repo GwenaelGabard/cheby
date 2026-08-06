@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 #ifndef CHEBY_UTILS_H
 #define CHEBY_UTILS_H
 

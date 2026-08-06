@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 #ifndef CHEBY_FUNCTION_H
 #define CHEBY_FUNCTION_H
 
