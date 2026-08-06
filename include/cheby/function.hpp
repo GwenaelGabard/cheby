@@ -393,7 +393,7 @@ class Function {
     ParamVector Roots() const {
         const auto colleague = ColleagueMatrix();
         auto values = BalanceMatrix(colleague).eigenvalues();
-        const double threshold = rel_tol * colleague.norm();
+        const double threshold = rel_tol * std::max(colleague.norm(), 1.0);
         ParamVector roots(values.size());
         Index j = 0;
         for (Index i = 0; i < values.size(); ++i) {
