@@ -226,6 +226,8 @@ class Basis {
         const Index N = order + 1;
         ValueMatrix matrix = ValueMatrix::Zero(N, N);
         matrix(0, 0) = 1.0;
+        if (N == 1)
+            return matrix;
         matrix(1, 1) = 1.0;
         for (Index i = 2; i < N; ++i) {
             matrix(Eigen::seq(1, N - 1), i) += 2.0 * matrix(Eigen::seq(0, N - 2), i - 1);
