@@ -35,7 +35,7 @@ The Python class `Basis1D` provides the following features:
 * Matrix for Dirichlet recombination
 
 The Python classes `RealFunction` and `ComplexFunction` provide representations of univariate functions as Chebyshev series.
-THey provide the following features:
+They provide the following features:
 * Construction of the Chebyshev representation based on a Python function
 * Evaluation of the function and its derivatives
 * Addition, subtraction and multiplication
@@ -59,4 +59,5 @@ pytest tests
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+* **Code** (including the example notebooks in `examples/`) is released under the [MIT License](https://github.com/GwenaelGabard/cheby/blob/main/LICENSE).
+* **Theory and documentation** are released under [CC BY 4.0](https://github.com/GwenaelGabard/cheby/blob/main/LICENSE-docs) - you may reuse and adapt them with attribution.

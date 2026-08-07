@@ -54,4 +54,10 @@ repos:
   rev: "0.9.1"
   hooks:
   - id: nbstripout
+    name: nbstripout (examples, keep output)
+    files: ^examples/.*\.ipynb$
     args: ["--keep-output", "--extra-keys", "metadata.language_info.version"]
+  - id: nbstripout
+    name: nbstripout (docs, strip output)
+    files: ^docs/.*\.ipynb$
+    args: ["--extra-keys", "metadata.language_info.version"]

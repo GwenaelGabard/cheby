@@ -18,7 +18,7 @@ parts:
   - file: function/evaluation
   - file: function/arithmetic
   - file: function/derivative
-  - file: function/integral
+  - file: function/primitives
   - file: function/roots
   - file: function/norms
   - file: function/advanced
@@ -28,3 +28,6 @@ parts:
   - file: api/real_function
   - file: api/complex_function
   - file: api/functions
+- caption: References
+  chapters:
+  - file: references

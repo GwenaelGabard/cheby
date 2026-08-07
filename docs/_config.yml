@@ -3,7 +3,8 @@
 # Comprehensive example: https://github.com/executablebooks/jupyter-book/blob/master/docs/_config.yml
 
 title: Cheby
-author: Gwenael Gabard
+author: Gwénaël Gabard
+copyright: "2023-2026"
 
 # Re-execute notebooks only when they change.
 # See https://jupyterbook.org/content/execute.html
@@ -30,6 +31,9 @@ repository:
 html:
   use_issues_button: true
   use_repository_button: true
+  extra_footer: |
+    <p>Text and documentation are licensed under
+    <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</p>
 
 sphinx:
   config:
