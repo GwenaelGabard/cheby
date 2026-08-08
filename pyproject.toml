@@ -50,6 +50,12 @@ build = ["cp39-*", "cp310-*", "cp311-*", "cp312-*", "cp313-*"]
 skip = ["pp*", "*-win32", "*-manylinux_i686"]
 dependency-versions = "latest"
 
+[tool.cibuildwheel.macos]
+# The C++17 code uses aligned operator new/delete, which requires macOS
+# 10.13+. The x86_64 slice of a universal2 build otherwise defaults to a
+# much older target (~10.9) and fails to compile.
+environment = { MACOSX_DEPLOYMENT_TARGET = "10.13" }
+
 [tool.setuptools_scm]
 fallback_version = "0.0.0-dev"
 

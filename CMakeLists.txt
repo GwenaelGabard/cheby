@@ -26,7 +26,7 @@ if (NOT Eigen3_FOUND)
     endif()
 endif()
 
-find_package(Python COMPONENTS Interpreter Development REQUIRED)
+find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
 
 if (NOT DEFINED PYTHON_EXECUTABLE)
     set(PYTHON_EXECUTABLE "${Python_EXECUTABLE}")
