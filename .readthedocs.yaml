@@ -8,6 +8,9 @@ build:
     pre_build:
       - "jupyter-book config sphinx docs/"
 
+sphinx:
+  configuration: docs/conf.py
+
 python:
    install:
    - requirements: docs/requirements.txt
